@@ -3,17 +3,23 @@ import Player from './classes/Player';
 import './style.scss';
 
 //Helpers (from http://jaketrent.com/post/addremove-classes-raw-javascript/)
+
+//checks if it has class X or O
 function hasClass(el, className) {
   if (el.classList)
     return el.classList.contains(className);
   else
     return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
 }
+
+//adds X or O
 function addClass(el, className) {
   if (el.classList)
     el.classList.add(className);
   else if (!hasClass(el, className)) el.className += " " + className;
 }
+
+//removes X or O
 function removeClass(el, className) {
   if (el.classList)
     el.classList.remove(className);
@@ -35,7 +41,8 @@ function drawWinningLine({ direction, row }) {
 
 
 //Starts a new game with a certain depth and a starting_player of 1 if human is going to start
-function newGame(depth = -1, starting_player = 1) {
+function newGame(depth = -1, starting_player = 1) 
+{
 	//Instantiating a new player and an empty board
 	let p = new Player(parseInt(depth));
 	let b = new Board(['','','','','','','','','']);
@@ -57,10 +64,11 @@ function newGame(depth = -1, starting_player = 1) {
 		maximizing = starting,
 		player_turn = starting;
 
-	//If computer is going to start, choose a random cell as long as it is the center or a corner
+	//If computer is going to start, choose the center 
 	if(!starting) {
-		let center_and_corners = [0,2,4,6,8];
-		let first_choice = center_and_corners[Math.floor(Math.random()*center_and_corners.length)];
+		//let center_and_corners = [0,2,4,6,8];
+		//let first_choice = center_and_corners[Math.floor(Math.random()*center_and_corners.length)];
+		let first_choice = 4;
 		let symbol = !maximizing ? 'x' : 'o';
 		b.insert(symbol, first_choice);
 		addClass(html_cells[first_choice], symbol);
@@ -68,35 +76,45 @@ function newGame(depth = -1, starting_player = 1) {
 	}
 
 	//Adding Click event listener for each cell
-  	b.state.forEach((cell, index) => {
+  	b.state.forEach((cell, index) => 
+  	{
   		html_cells[index].addEventListener('click', () => {
+
   			//If cell is already occupied or the board is in a terminal state or it's not humans turn, return false
+
   			if(hasClass(html_cells[index], 'x') || hasClass(html_cells[index], 'o') || b.isTerminal() || !player_turn) return false;
 
   			let symbol = maximizing ? 'x' : 'o'; //Maximizing player is always 'x'
 
   			//Update the Board class instance as well as the Board UI
+
   			b.insert(symbol, index);
   			addClass(html_cells[index], symbol);
 
   			//If it's a terminal move and it's not a draw, then human won
-  			if(b.isTerminal()) {
+
+  			if(b.isTerminal())
+  			{
   				let { winner } = b.isTerminal();
 				if(winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_human');
   				drawWinningLine(b.isTerminal());
   			}
+
   			player_turn = 0; //Switch turns
 
   			//Get computer's best move and update the UI
+
   			p.getBestMove(b, !maximizing, best => {
   				let symbol = !maximizing ? 'x' : 'o';
   				b.insert(symbol, best);
   				addClass(html_cells[best], symbol);
-  				if(b.isTerminal()) {
+  				if(b.isTerminal()) 
+  				{
 	  				let { winner } = b.isTerminal();
 					if(winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_robot');
 	  				drawWinningLine(b.isTerminal());
 	  			}
+
   				player_turn = 1; //Switch turns
   			});
   		}, false);
@@ -107,12 +125,14 @@ function newGame(depth = -1, starting_player = 1) {
 document.addEventListener("DOMContentLoaded", event => { 
 
 	//Start a new game when page loads with default values
+
 	let depth = -1;
 	let starting_player = 1;
 	newGame(depth, starting_player);
 
 
 	//Events handlers for depth, starting player options
+	
 	document.getElementById("depth").addEventListener("click", (event) => {
 		if(event.target.tagName !== "LI" || hasClass(event.target, 'active')) return
 		let depth_choices = [...document.getElementById("depth").children[0].children];

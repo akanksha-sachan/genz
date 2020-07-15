@@ -282,7 +282,7 @@ var Player = function () {
 																var best = -100;
 																//Loop through all empty cells
 																board.getAvailableMoves().forEach(function (index) {
-																				//Initialise a new board with the current state 
+																				//Initialise a new board with the current state
 
 																				var child = new _Board2.default(board.state.slice());
 
@@ -292,7 +292,7 @@ var Player = function () {
 
 																				//Recursively calling getBestMove this time with the new board and minimizing turn and incrementing the depth
 
-																				var node_value = _this.getBestMove(child, false, callback, depth + 1, alpha, beta);
+																				var node_value = _this.getBestMove(child, false, callback, depth + 1);
 
 																				//Updating best value
 
@@ -338,7 +338,7 @@ var Player = function () {
 																//Loop through all empty cells
 
 																board.getAvailableMoves().forEach(function (index) {
-																				//Initialize a new board with the current state 
+																				//Initialize a new board with the current state
 
 																				var child = new _Board2.default(board.state.slice());
 
@@ -348,7 +348,7 @@ var Player = function () {
 
 																				//Recursively calling getBestMove this time with the new board and maximizing turn and incrementing the depth
 
-																				var node_value = _this.getBestMove(child, true, callback, depth + 1, alpha, beta);
+																				var node_value = _this.getBestMove(child, true, callback, depth + 1);
 
 																				//Updating best value
 

@@ -94,18 +94,31 @@ var Board = function () {
 
         this.state = state;
     }
-
-    //Checks if board has no symbols yet
+    //Logs a visualised board with the current state to the console
 
 
     _createClass(Board, [{
+        key: 'printFormattedBoard',
+        value: function printFormattedBoard() {
+            var formattedString = '';
+            this.state.forEach(function (cell, index) {
+                formattedString += cell ? ' ' + cell + ' |' : '   |';
+                if ((index + 1) % 3 == 0) {
+                    formattedString = formattedString.slice(0, -1);
+                    if (index < 8) formattedString += '\n\u2015\u2015\u2015 \u2015\u2015\u2015 \u2015\u2015\u2015\n';
+                }
+            });
+            console.log('%c' + formattedString, 'color: #6d4e42;font-size:16px');
+        }
+        //Checks if board has no symbols yet
+
+    }, {
         key: 'isEmpty',
         value: function isEmpty() {
             return this.state.every(function (cell) {
                 return !cell;
             });
         }
-
         //Check if board has no spaces available
 
     }, {
@@ -115,7 +128,6 @@ var Board = function () {
                 return cell;
             });
         }
-
         /**
          * Inserts a new symbol(x,o) into
          * @param {String} symbol 
@@ -130,7 +142,6 @@ var Board = function () {
             this.state[position] = symbol;
             return true;
         }
-
         //Returns an array containing available moves for the current state
 
     }, {
@@ -142,7 +153,6 @@ var Board = function () {
             });
             return moves;
         }
-
         /**
          * Checks if the board has a terminal state ie. a player wins or the board is full with no winner
          * @return {Object} an object containing the winner, direction of winning and row number
@@ -465,18 +475,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 //Helpers (from http://jaketrent.com/post/addremove-classes-raw-javascript/)
-
-//checks if it has class X or O
 function hasClass(el, className) {
 	if (el.classList) return el.classList.contains(className);else return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
 }
-
-//adds X or O
 function addClass(el, className) {
 	if (el.classList) el.classList.add(className);else if (!hasClass(el, className)) el.className += " " + className;
 }
-
-//removes X or O
 function removeClass(el, className) {
 	if (el.classList) el.classList.remove(className);else if (hasClass(el, className)) {
 		var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
@@ -525,8 +529,10 @@ function newGame() {
 	    maximizing = starting,
 	    player_turn = starting;
 
-	//If computer is going to start, choose the center
+	//If computer is going to start, choose a random cell as long as it is the center or a corner
 	if (!starting) {
+		//let center_and_corners = [0,2,4,6,8];
+		//let first_choice = center_and_corners[Math.floor(Math.random()*center_and_corners.length)];
 		var symbol = !maximizing ? 'x' : 'o';
 		b.insert(symbol, 4);
 		addClass(html_cells[4], symbol);
@@ -536,20 +542,16 @@ function newGame() {
 	//Adding Click event listener for each cell
 	b.state.forEach(function (cell, index) {
 		html_cells[index].addEventListener('click', function () {
-
 			//If cell is already occupied or the board is in a terminal state or it's not humans turn, return false
-
 			if (hasClass(html_cells[index], 'x') || hasClass(html_cells[index], 'o') || b.isTerminal() || !player_turn) return false;
 
 			var symbol = maximizing ? 'x' : 'o'; //Maximizing player is always 'x'
 
 			//Update the Board class instance as well as the Board UI
-
 			b.insert(symbol, index);
 			addClass(html_cells[index], symbol);
 
 			//If it's a terminal move and it's not a draw, then human won
-
 			if (b.isTerminal()) {
 				var _b$isTerminal = b.isTerminal(),
 				    winner = _b$isTerminal.winner;
@@ -557,11 +559,9 @@ function newGame() {
 				if (winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_human');
 				drawWinningLine(b.isTerminal());
 			}
-
 			player_turn = 0; //Switch turns
 
 			//Get computer's best move and update the UI
-
 			p.getBestMove(b, -100, 100, !maximizing, function (best) {
 				var symbol = !maximizing ? 'x' : 'o';
 				b.insert(symbol, best);
@@ -573,7 +573,6 @@ function newGame() {
 					if (_winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_robot');
 					drawWinningLine(b.isTerminal());
 				}
-
 				player_turn = 1; //Switch turns
 			});
 		}, false);
@@ -584,13 +583,11 @@ function newGame() {
 document.addEventListener("DOMContentLoaded", function (event) {
 
 	//Start a new game when page loads with default values
-
 	var depth = -1;
 	var starting_player = 1;
 	newGame(depth, starting_player);
 
 	//Events handlers for depth, starting player options
-
 	document.getElementById("depth").addEventListener("click", function (event) {
 		if (event.target.tagName !== "LI" || hasClass(event.target, 'active')) return;
 		var depth_choices = [].concat(_toConsumableArray(document.getElementById("depth").children[0].children));

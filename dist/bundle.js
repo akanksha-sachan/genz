@@ -415,7 +415,7 @@ var Player = function () {
 										//pruning the tree
 
 										if (alpha >= beta) {
-												continue;
+												//continue;
 										}
 								}
 
@@ -479,7 +479,7 @@ var Player = function () {
 										}
 
 										if (beta <= alpha) {
-												continue;
+												//continue;
 										}
 								}
 

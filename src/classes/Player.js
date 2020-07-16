@@ -199,7 +199,7 @@ class Player
 
 				if(alpha >= beta)
 				{
-					continue;
+					//continue;
 				}
 			}
 
@@ -272,7 +272,7 @@ class Player
 
 				if (beta <= alpha)
 				{
-					continue;
+					//continue;
 				}
 			}
 

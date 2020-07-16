@@ -372,8 +372,7 @@ var Player = function () {
               		if(board.state[lv] == 'x')
               			counter++;
               	}
-            	
-            }*/
+              }*/
 
 												//Current player is maximizing
 
@@ -387,7 +386,7 @@ var Player = function () {
 																var avail = board.getAvailableMoves();
 																var loopvar1;
 																for (loopvar1 = 0; loopvar1 < avail.length; loopvar1++) {
-																				//Initialise a new board with the current state 
+																				//Initialise a new board with the current state
 
 																				var child = new _Board2.default(board.state.slice());
 
@@ -409,7 +408,7 @@ var Player = function () {
 																				if (depth == 0) {
 																								//Comma seperated indicies if multiple moves have the same heuristic value
 
-																								var moves = this.nodes_map.has(node_value) ? this.nodes_map.get(node_value) + ',' + index : index;
+																								var moves = this.nodes_map.has(node_value) ? this.nodes_map.get(node_value) + ',' + avail[loopvar1] : avail[loopvar1];
 																								this.nodes_map.set(node_value, moves);
 																				}
 
@@ -453,7 +452,7 @@ var Player = function () {
 																var avail2 = board.getAvailableMoves();
 																var loopvar2;
 																for (loopvar2 = 0; loopvar2 < avail2.length; loopvar2++) {
-																				//Initialize a new board with the current state 
+																				//Initialize a new board with the current state
 
 																				var _child = new _Board2.default(board.state.slice());
 
@@ -475,7 +474,7 @@ var Player = function () {
 																				if (depth == 0) {
 																								//Comma seperated indicies if multiple moves have the same heuristic value
 
-																								var moves = this.nodes_map.has(_node_value) ? this.nodes_map.get(_node_value) + ',' + index : index;
+																								var moves = this.nodes_map.has(_node_value) ? this.nodes_map.get(_node_value) + ',' + avail2[loopvar2] : avail2[loopvar2];
 																								this.nodes_map.set(_node_value, moves);
 																				}
 

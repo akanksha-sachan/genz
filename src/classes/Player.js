@@ -24,7 +24,7 @@ class Player
      * @return {Number} the index of the best move
      */
 
-	getBestMove(alpha, beta, board, maximizing = true, callback = () => {}, depth = 0)
+	getBestMove(board, alpha, beta, maximizing = true, callback = () => {}, depth = 0)
 	{
 		//Throw an error if the first argument is not a board
 
@@ -178,7 +178,7 @@ class Player
 
 				//Recursively calling getBestMove this time with the new board and minimizing turn and incrementing the depth
 
-				let node_value = this.getBestMove(alpha, beta, child, false, callback, depth + 1);
+				let node_value = this.getBestMove(child, alpha, beta, false, callback, depth + 1);
 
 				//Updating best value
 
@@ -199,7 +199,7 @@ class Player
 
 				if(alpha >= beta)
 				{
-					//continue;
+					break;
 				}
 			}
 
@@ -253,7 +253,7 @@ class Player
 
 				//Recursively calling getBestMove this time with the new board and maximizing turn and incrementing the depth
 
-				let node_value = this.getBestMove(alpha, beta, child, true, callback, depth + 1);
+				let node_value = this.getBestMove(child, alpha, beta, true, callback, depth + 1);
 
 				//Updating best value
 
@@ -272,7 +272,7 @@ class Player
 
 				if (beta <= alpha)
 				{
-					//continue;
+					break;
 				}
 			}
 

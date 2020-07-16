@@ -30,7 +30,7 @@ function removeClass(el, className) {
 }
 
 /*
-Helper function that takes the object returned from isTerminal() and adds a 
+Helper function that takes the object returned from isTerminal() and adds a
 class to the board that will handle drawing the winning line's animation
 */
 function drawWinningLine({ direction, row }) {
@@ -41,7 +41,7 @@ function drawWinningLine({ direction, row }) {
 
 
 //Starts a new game with a certain depth and a starting_player of 1 if human is going to start
-function newGame(depth = -1, starting_player = 1) 
+function newGame(depth = -1, starting_player = 1)
 {
 	//Instantiating a new player and an empty board
 	let p = new Player(parseInt(depth));
@@ -51,7 +51,7 @@ function newGame(depth = -1, starting_player = 1)
 	let board = document.getElementById("board");
 	board.className = '';
 	board.innerHTML = '<div class="cell-0"></div><div class="cell-1"></div><div class="cell-2"></div><div class="cell-3"></div><div class="cell-4"></div><div class="cell-5"></div><div class="cell-6"></div><div class="cell-7"></div><div class="cell-8"></div>';
-	
+
 	//Clearing all celebrations classes
 	removeClass(document.getElementById("charachters"), 'celebrate_human');
 	removeClass(document.getElementById("charachters"), 'celebrate_robot');
@@ -64,10 +64,10 @@ function newGame(depth = -1, starting_player = 1)
 		maximizing = starting,
 		player_turn = starting;
 
-	//If computer is going to start, choose the center 
+	//If computer is going to start, choose the center
 	if(!starting) {
-		
-		
+
+
 		let symbol = !maximizing ? 'x' : 'o';
 		b.insert(symbol, 4);
 		addClass(html_cells[first_choice], symbol);
@@ -75,7 +75,7 @@ function newGame(depth = -1, starting_player = 1)
 	}
 
 	//Adding Click event listener for each cell
-  	b.state.forEach((cell, index) => 
+  	b.state.forEach((cell, index) =>
   	{
   		html_cells[index].addEventListener('click', () => {
 
@@ -103,11 +103,11 @@ function newGame(depth = -1, starting_player = 1)
 
   			//Get computer's best move and update the UI
 
-  			p.getBestMove(-100, 100, b, !maximizing, best => {
+  			p.getBestMove(b, -100, 100, !maximizing, best => {
   				let symbol = !maximizing ? 'x' : 'o';
   				b.insert(symbol, best);
   				addClass(html_cells[best], symbol);
-  				if(b.isTerminal()) 
+  				if(b.isTerminal())
   				{
 	  				let { winner } = b.isTerminal();
 					if(winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_robot');
@@ -121,7 +121,7 @@ function newGame(depth = -1, starting_player = 1)
   	});
 }
 
-document.addEventListener("DOMContentLoaded", event => { 
+document.addEventListener("DOMContentLoaded", event => {
 
 	//Start a new game when page loads with default values
 
@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", event => {
 
 
 	//Events handlers for depth, starting player options
-	
+
 	document.getElementById("depth").addEventListener("click", (event) => {
 		if(event.target.tagName !== "LI" || hasClass(event.target, 'active')) return
 		let depth_choices = [...document.getElementById("depth").children[0].children];

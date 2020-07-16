@@ -55,82 +55,82 @@ class Player
 		//var weights = [ 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 ]; // HAVE TO DECIDE WEIGHTS
 
 		//Checking for horizontal wins
-        /*if(board.state[0] == board.state[1] && board.state[0]) {
-            return 2;
-        }
-        if(board.state[1] == board.state[2] && board.state[1]) {
-            return 0;
-        }
-        if(board.state[0] == board.state[2] && board.state[0]) {
-            return 1;
-        }
-         if(board.state[3] == board.state[4] && board.state[3]) {
-            return 5;
-        }
-         if(board.state[3] == board.state[5] && board.state[3]) {
-            return 4;
-        }
-         if(board.state[4] == board.state[5] && board.state[4]) {
-            return 3;
-        }
-         if(board.state[6] == board.state[7] && board.state[6]) {
-            return 8;
-        }
-         if(board.state[6] == board.state[8] && board.state[6]) {
-            return 7;
-        }
-         if(board.state[7] == board.state[8] && board.state[7]) {
-            return 6;
-        }
+    if(board.state[0] == board.state[1] && board.state[0]) {
+			return 2;
+		}
+    if(board.state[1] == board.state[2] && board.state[1]) {
+      return 0;
+    }
+    if(board.state[0] == board.state[2] && board.state[0]) {
+      return 1;
+    }
+    if(board.state[3] == board.state[4] && board.state[3]) {
+      return 5;
+    }
+    if(board.state[3] == board.state[5] && board.state[3]) {
+      return 4;
+    }
+    if(board.state[4] == board.state[5] && board.state[4]) {
+      return 3;
+    }
+    if(board.state[6] == board.state[7] && board.state[6]) {
+			return 8;
+    }
+    if(board.state[6] == board.state[8] && board.state[6]) {
+      return 7;
+    }
+    if(board.state[7] == board.state[8] && board.state[7]) {
+      return 6;
+    }
 
         //Checking for vertical wins
-        if(board.state[0] == board.state[3] && board.state[0]) {
-            return 6;
-        }
-        if(board.state[0] == board.state[6] && board.state[0]) {
-            return 3;
-        }
-        if(board.state[3] == board.state[6] && board.state[3]) {
-            return 0;
-        }
-         if(board.state[1] == board.state[4] && board.state[1]) {
-            return 7;
-        }
-         if(board.state[1] == board.state[7] && board.state[1]) {
-            return 4;
-        }
-         if(board.state[4] == board.state[7] && board.state[4]) {
-            return 1;
-        }
-         if(board.state[2] == board.state[5] && board.state[2]) {
-            return 8;
-        }
-         if(board.state[2] == board.state[8] && board.state[8]) {
-            return 5;
-        }
-         if(board.state[5] == board.state[8] && board.state[5]) {
-            return 2;
-        }
+    if(board.state[0] == board.state[3] && board.state[0]) {
+      return 6;
+    }
+    if(board.state[0] == board.state[6] && board.state[0]) {
+      return 3;
+    }
+    if(board.state[3] == board.state[6] && board.state[3]) {
+      return 0;
+    }
+    if(board.state[1] == board.state[4] && board.state[1]) {
+			return 7;
+    }
+    if(board.state[1] == board.state[7] && board.state[1]) {
+      return 4;
+    }
+    if(board.state[4] == board.state[7] && board.state[4]) {
+      return 1;
+    }
+    if(board.state[2] == board.state[5] && board.state[2]) {
+      return 8;
+    }
+    if(board.state[2] == board.state[8] && board.state[8]) {
+      return 5;
+    }
+    if(board.state[5] == board.state[8] && board.state[5]) {
+      return 2;
+    }
 
         //Checking for diagonal wins
-        if(board.state[0] == board.state[4] && board.state[0]) {
-            return 8;
-        }
-        if(board.state[0] == board.state[8] && board.state[0]) {
-            return 4;
-        }
-        if(board.state[4] == board.state[8] && board.state[4]) {
-            return 0;
-        }
-         if(board.state[2] == board.state[4] && board.state[2]) {
-            return 6;
-        }
-         if(board.state[2] == board.state[6] && board.state[2]) {
-            return 4;
-        }
-         if(board.state[4] == board.state[6] && board.state[4]) {
-            return 2;
-        }
+    if(board.state[0] == board.state[4] && board.state[0]) {
+      return 8;
+    }
+    if(board.state[0] == board.state[8] && board.state[0]) {
+      return 4;
+    }
+    if(board.state[4] == board.state[8] && board.state[4]) {
+      return 0;
+    }
+    if(board.state[2] == board.state[4] && board.state[2]) {
+      return 6;
+    }
+    if(board.state[2] == board.state[6] && board.state[2]) {
+      return 4;
+    }
+    if(board.state[4] == board.state[6] && board.state[4]) {
+      return 2;
+    }
 
         //var counter = 0;
         //var lv;
@@ -168,12 +168,12 @@ class Player
 			for (loopvar1 = 0; loopvar1 < avail.length; loopvar1++)
 			{
 				//Initialise a new board with the current state
-
+				var index1 = avail[loopvar1];
 				let child = new Board(board.state.slice());
 
 				//Create a child node by inserting the maximizing symbol x into the current empty cell
 
-				child.insert('x', avail[loopvar1]);
+				child.insert('x', index1);
 
 
 				//Recursively calling getBestMove this time with the new board and minimizing turn and incrementing the depth
@@ -191,7 +191,7 @@ class Player
 				{
 					//Comma seperated indicies if multiple moves have the same heuristic value
 
-					var moves = this.nodes_map.has(node_value) ? `${this.nodes_map.get(node_value)},${avail[loopvar1]}` : avail[loopvar1];
+					var moves = this.nodes_map.has(node_value) ? `${this.nodes_map.get(node_value)},${index1}` : index1;
 					this.nodes_map.set(node_value, moves);
 				}
 
@@ -199,7 +199,7 @@ class Player
 
 				if(alpha >= beta)
 				{
-					break;
+					continue;
 				}
 			}
 
@@ -243,12 +243,12 @@ class Player
 			for (loopvar2 = 0; loopvar2 < avail2.length; loopvar2++)
 			{
 				//Initialize a new board with the current state
-
+				var index2 = avail2[loopvar2]
 				let child = new Board(board.state.slice());
 
 				//Create a child node by inserting the minimizing symbol o into the current emoty cell
 
-				child.insert('o', avail2[loopvar2]);
+				child.insert('o', index2);
 
 
 				//Recursively calling getBestMove this time with the new board and maximizing turn and incrementing the depth
@@ -266,13 +266,13 @@ class Player
 				{
 					//Comma seperated indicies if multiple moves have the same heuristic value
 
-					var moves = this.nodes_map.has(node_value) ? this.nodes_map.get(node_value) + ',' + avail2[loopvar2] : avail2[loopvar2];
+					var moves = this.nodes_map.has(node_value) ? this.nodes_map.get(node_value) + ',' + index2 : index2;
 					this.nodes_map.set(node_value, moves);
 				}
 
 				if (beta <= alpha)
 				{
-					break;
+					continue;
 				}
 			}
 

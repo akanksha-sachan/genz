@@ -55,7 +55,7 @@ class Player
 		//var weights = [ 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 ]; // HAVE TO DECIDE WEIGHTS
 
 		//Checking for horizontal wins
-        if(board.state[0] == board.state[1] && board.state[0]) {
+        /*if(board.state[0] == board.state[1] && board.state[0]) {
             return 2;
         }
         if(board.state[1] == board.state[2] && board.state[1]) {

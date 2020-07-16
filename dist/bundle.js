@@ -207,7 +207,7 @@ exports.default = Board;
 
 
 Object.defineProperty(exports, "__esModule", {
-		value: true
+	value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -226,288 +226,213 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   * @param {Map} nodes_map - stores the heuristic values for each possible move
 */
 var Player = function () {
-		function Player() {
-				var max_depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
+	function Player() {
+		var max_depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
 
-				_classCallCheck(this, Player);
+		_classCallCheck(this, Player);
 
-				this.max_depth = max_depth;
-				this.nodes_map = new Map();
-		}
+		this.max_depth = max_depth;
+		this.nodes_map = new Map();
+	}
+	/**
+  * Uses minimax algorithm to get the best move
+  * @param {Object} board - an instant of the board class
+  * @param {Boolean} maximizing - whether the player is a maximizing or a minimizing player
+  * @param {Function} callback - a function to run after the best move calculation is done
+  * @param {Number} depth - used internally in the function to increment the depth each recursive call
+  * @return {Number} the index of the best move
+  */
 
-		/**
-   * Uses minimax algorithm with alpha beta pruning to get the best move
-   * @param {Number} alpha - best value that the maximizer currently can guarantee at that level or above
-   * @param {Number} beta - best value that the minimizer currently can guarantee at that level or above
-   * @param {Object} board - an instant of the board class
-   * @param {Boolean} maximizing - whether the player is a maximizing or a minimizing player
-   * @param {Function} callback - a function to run after the best move calculation is done
-   * @param {Number} depth - used internally in the function to increment the depth each recursive call
-   * @return {Number} the index of the best move
-   */
 
-		_createClass(Player, [{
-				key: 'getBestMove',
-				value: function getBestMove(board, alpha, beta) {
-						var maximizing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-						var callback = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : function () {};
-						var depth = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
+	_createClass(Player, [{
+		key: 'getBestMove',
+		value: function getBestMove(board, alpha, beta) {
+			var maximizing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+			var callback = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : function () {};
+			var depth = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
 
-						//Throw an error if the first argument is not a board
+			//Throw an error if the first argument is not a board
+			if (board.constructor.name !== "Board") throw 'The first argument to the getBestMove method should be an instance of Board class.';
+			//Decides whether to log each tree iteration to the console
+			var TRACE = window.trace_ttt;
+			//clear nodes_map if the function is called for a new move
+			if (depth == 0) this.nodes_map.clear();
 
-						if (board.constructor.name !== "Board") throw 'The first argument to the getBestMove method should be an instance of Board class.';
-
-						//clear nodes_map if the function is called for a new move
-
-						if (depth == 0) {
-								this.nodes_map.clear();
-						}
-
-						//If the board state is a terminal one, return the heuristic value
-
-						if (board.isTerminal() || depth == this.max_depth) {
-								if (board.isTerminal().winner == 'x') {
-										return 100 - depth;
-								} else if (board.isTerminal().winner == 'o') {
-										return -100 + depth;
-								}
-
-								return 0;
-						}
-
-						//var weights = [ 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 ]; // HAVE TO DECIDE WEIGHTS
-
-						//Checking for horizontal wins
-						if (board.state[0] == board.state[1] && board.state[0]) {
-								return 2;
-						}
-						if (board.state[1] == board.state[2] && board.state[1]) {
-								return 0;
-						}
-						if (board.state[0] == board.state[2] && board.state[0]) {
-								return 1;
-						}
-						if (board.state[3] == board.state[4] && board.state[3]) {
-								return 5;
-						}
-						if (board.state[3] == board.state[5] && board.state[3]) {
-								return 4;
-						}
-						if (board.state[4] == board.state[5] && board.state[4]) {
-								return 3;
-						}
-						if (board.state[6] == board.state[7] && board.state[6]) {
-								return 8;
-						}
-						if (board.state[6] == board.state[8] && board.state[6]) {
-								return 7;
-						}
-						if (board.state[7] == board.state[8] && board.state[7]) {
-								return 6;
-						}
-
-						//Checking for vertical wins
-						if (board.state[0] == board.state[3] && board.state[0]) {
-								return 6;
-						}
-						if (board.state[0] == board.state[6] && board.state[0]) {
-								return 3;
-						}
-						if (board.state[3] == board.state[6] && board.state[3]) {
-								return 0;
-						}
-						if (board.state[1] == board.state[4] && board.state[1]) {
-								return 7;
-						}
-						if (board.state[1] == board.state[7] && board.state[1]) {
-								return 4;
-						}
-						if (board.state[4] == board.state[7] && board.state[4]) {
-								return 1;
-						}
-						if (board.state[2] == board.state[5] && board.state[2]) {
-								return 8;
-						}
-						if (board.state[2] == board.state[8] && board.state[8]) {
-								return 5;
-						}
-						if (board.state[5] == board.state[8] && board.state[5]) {
-								return 2;
-						}
-
-						//Checking for diagonal wins
-						if (board.state[0] == board.state[4] && board.state[0]) {
-								return 8;
-						}
-						if (board.state[0] == board.state[8] && board.state[0]) {
-								return 4;
-						}
-						if (board.state[4] == board.state[8] && board.state[4]) {
-								return 0;
-						}
-						if (board.state[2] == board.state[4] && board.state[2]) {
-								return 6;
-						}
-						if (board.state[2] == board.state[6] && board.state[2]) {
-								return 4;
-						}
-						if (board.state[4] == board.state[6] && board.state[4]) {
-								return 2;
-						}
-
-						//var counter = 0;
-						//var lv;
-
-						//to check if there is an X in the centre
-						/*
-      for (lv = 0; lv < 8; lv ++)
-      {
-      	if(lv!=4)
-      	{
-      		if(board.state[lv] == '')
-      			counter++;
-          	}
-        	if(lv == 4)
-        	{
-        		if(board.state[lv] == 'x')
-        			counter++;
-        	}
-        }*/
-
-						//Current player is maximizing
-
-						if (maximizing) {
-								//Initialise best to the lowest possible value
-
-								var best = -100;
-
-								//Loop through all empty cells
-
-								var avail = board.getAvailableMoves();
-								var loopvar1;
-								for (loopvar1 = 0; loopvar1 < avail.length; loopvar1++) {
-										//Initialise a new board with the current state
-										var index1 = avail[loopvar1];
-										var child = new _Board2.default(board.state.slice());
-
-										//Create a child node by inserting the maximizing symbol x into the current empty cell
-
-										child.insert('x', index1);
-
-										//Recursively calling getBestMove this time with the new board and minimizing turn and incrementing the depth
-
-										var node_value = this.getBestMove(child, alpha, beta, false, callback, depth + 1);
-
-										//Updating best value
-
-										best = Math.max(best, node_value); // * weights[index] NEED TO THINK ABOUT THIS
-										alpha = Math.max(alpha, best);
-
-										//If it's the main function call, not a recursive one, map each heuristic value with it's moves indicies
-
-										if (depth == 0) {
-												//Comma seperated indicies if multiple moves have the same heuristic value
-
-												var moves = this.nodes_map.has(node_value) ? this.nodes_map.get(node_value) + ',' + index1 : index1;
-												this.nodes_map.set(node_value, moves);
-										}
-
-										//pruning the tree
-
-										if (alpha >= beta) {
-												break;
-										}
-								}
-
-								//If it's the main call, return the index of the best move or a random index if multiple indicies have the same value
-
-								if (depth == 0) {
-										if (typeof this.nodes_map.get(best) == 'string') {
-												var arr = this.nodes_map.get(best).split(',');
-												//var rand = Math.floor(Math.random() * arr.length);
-												//var ret = arr[rand];
-												var ret = arr[0];
-										} else {
-												ret = this.nodes_map.get(best);
-										}
-
-										//run a callback after calculation and return the index
-
-										callback(ret);
-										return ret;
-								}
-
-								//If not main call (recursive) return the heuristic value for next calculation
-
-								return best;
-						}
-
-						if (!maximizing) {
-								//Initialise best to the highest possible value
-
-								var _best = 100;
-
-								//Loop through all empty cells
-
-								var avail2 = board.getAvailableMoves();
-								var loopvar2;
-								for (loopvar2 = 0; loopvar2 < avail2.length; loopvar2++) {
-										//Initialize a new board with the current state
-										var index2 = avail2[loopvar2];
-										var _child = new _Board2.default(board.state.slice());
-
-										//Create a child node by inserting the minimizing symbol o into the current emoty cell
-
-										_child.insert('o', index2);
-
-										//Recursively calling getBestMove this time with the new board and maximizing turn and incrementing the depth
-
-										var _node_value = this.getBestMove(_child, alpha, beta, true, callback, depth + 1);
-
-										//Updating best value
-
-										_best = Math.min(_best, _node_value);
-										beta = Math.min(beta, _best);
-
-										//If it's the main function call, not a recursive one, map each heuristic value with it's moves indicies
-
-										if (depth == 0) {
-												//Comma seperated indicies if multiple moves have the same heuristic value
-
-												var moves = this.nodes_map.has(_node_value) ? this.nodes_map.get(_node_value) + ',' + index2 : index2;
-												this.nodes_map.set(_node_value, moves);
-										}
-
-										if (beta <= alpha) {
-												break;
-										}
-								}
-
-								//If it's the main call, return the index of the best move or a random index if multiple indicies have the same value
-
-								if (depth == 0) {
-										if (typeof this.nodes_map.get(_best) == 'string') {
-												var arr = this.nodes_map.get(_best).split(',');
-												//var rand = Math.floor(Math.random() * arr.length);
-												//var ret = arr[rand];
-												var ret = arr[0];
-										} else {
-												ret = this.nodes_map.get(_best);
-										}
-
-										//run a callback after calculation and return the index
-
-										callback(ret);
-										return ret;
-								}
-
-								//If not main call (recursive) return the heuristic value for next calculation
-								return _best;
-						}
+			//If the board state is a terminal one, return the heuristic value
+			if (board.isTerminal() || depth == this.max_depth) {
+				if (board.isTerminal().winner == 'x') {
+					return 100 - depth;
+				} else if (board.isTerminal().winner == 'o') {
+					return -100 + depth;
 				}
-		}]);
+				return 0;
+			}
 
-		return Player;
+			//Defining some styles for console logging
+			var console_styles = {
+				turn_and_available_moves: 'background: #7f3192; color: #fff; font-size:14px;padding: 0 5px;',
+				exploring_parent: 'background: #353535;color: #fff;padding: 0 5px;font-size:18px',
+				exploring_child: 'background: #f03;color: #fff;padding: 0 5px',
+				parent_heuristic: 'background: #26d47c; color: #fff; font-size:14px;padding: 0 5px;',
+				child_heuristic: 'background: #5f9ead; color: #fff; font-size:14px;padding: 0 5px;',
+				all_moves: 'background: #e27a50;color: #fff;padding: 0 5px;font-size:14px',
+				best_move: 'background: #e8602a;color: #fff;padding: 0 5px;font-size:18px'
+			};
+			//Destructuring Styles
+			var turn_and_available_moves = console_styles.turn_and_available_moves,
+			    exploring_parent = console_styles.exploring_parent,
+			    exploring_child = console_styles.exploring_child,
+			    child_heuristic = console_styles.child_heuristic,
+			    parent_heuristic = console_styles.parent_heuristic,
+			    all_moves = console_styles.all_moves,
+			    best_move = console_styles.best_move;
+
+			//Console Tracing Code
+
+			if (TRACE) {
+				var p = maximizing ? 'Maximizing' : 'Minimizing';
+				console.log('%c' + p + ' player\'s turn Depth: ' + depth, turn_and_available_moves);
+				console.log('%cAvailable Moves: ' + board.getAvailableMoves().join(' '), turn_and_available_moves);
+				if (depth == 0) board.printFormattedBoard();
+			}
+
+			//Current player is maximizing
+			if (maximizing) {
+				//Initializ best to the lowest possible value
+				var best = -100;
+				//Loop through all empty cells
+				var avail = board.getAvailableMoves();
+				var loopvar1;
+				for (loopvar1 = 0; loopvar1 < avail.length; loopvar1++) {
+					//Initialize a new board with the current state (slice() is used to create a new array and not modify the original)
+					var child = new _Board2.default(board.state.slice());
+					//Create a child node by inserting the maximizing symbol x into the current emoty cell
+					child.insert('x', avail[loopvar1]);
+
+					//Console Tracing Code
+					if (TRACE) {
+						var styles = depth == 0 ? exploring_parent : exploring_child;
+						console.log('%cExploring move ' + avail[loopvar1], styles);
+						child.printFormattedBoard();
+					}
+
+					//Recursively calling getBestMove this time with the new board and minimizing turn and incrementing the depth
+					var node_value = this.getBestMove(child, alpha, beta, false, callback, depth + 1);
+					//Updating best value
+					best = Math.max(best, node_value);
+					alpha = Math.max(alpha, best);
+
+					//Console Tracing Code
+					if (TRACE) {
+						if (depth == 0) {
+							console.log('%cMove ' + avail[loopvar1] + ' yielded a heuristic value of ' + node_value, parent_heuristic);
+						} else {
+							console.log('%cChild move ' + avail[loopvar1] + ' yielded a heuristic value of ' + node_value, child_heuristic);
+						}
+					}
+
+					//If it's the main function call, not a recursive one, map each heuristic value with it's moves indicies
+					if (depth == 0) {
+						//Comma seperated indicies if multiple moves have the same heuristic value
+						var moves = this.nodes_map.has(node_value) ? this.nodes_map.get(node_value) + ',' + avail[loopvar1] : avail[loopvar1];
+						this.nodes_map.set(node_value, moves);
+					}
+
+					if (alpha >= beta) {
+						break;
+					}
+				}
+				//If it's the main call, return the index of the best move or a random index if multiple indicies have the same value
+				if (depth == 0) {
+					if (typeof this.nodes_map.get(best) == 'string') {
+						var arr = this.nodes_map.get(best).split(',');
+						var rand = Math.floor(Math.random() * arr.length);
+						var ret = arr[rand];
+					} else {
+						ret = this.nodes_map.get(best);
+					}
+					//Console Tracing Code
+					if (TRACE) {
+						this.nodes_map.forEach(function (index, value) {
+							console.log('%cMove(s) ' + index + ' yielded ' + value, all_moves);
+						});
+						console.log('%cMove ' + ret + ' was decided as the best move', best_move);
+					}
+					//run a callback after calculation and return the index
+					callback(ret);
+					return ret;
+				}
+				//If not main call (recursive) return the heuristic value for next calculation
+				return best;
+			}
+
+			if (!maximizing) {
+				//Initializ best to the highest possible value
+				var _best = 100;
+				//Loop through all empty cells
+				var avail2 = board.getAvailableMoves();
+				var loopvar2;
+				for (loopvar2 = 0; loopvar2 < avail2.length; loopvar2++) {
+					//Initialize a new board with the current state (slice() is used to create a new array and not modify the original)
+					var _child = new _Board2.default(board.state.slice());
+					//Create a child node by inserting the minimizing symbol o into the current emoty cell
+					_child.insert('o', avail2[loopvar2]);
+
+					//Console Tracing Code
+					if (TRACE) {
+						var _styles = depth == 0 ? exploring_parent : exploring_child;
+						console.log('%cExploring move ' + avail2[loopvar2], _styles);
+						_child.printFormattedBoard();
+					}
+
+					//Recursively calling getBestMove this time with the new board and maximizing turn and incrementing the depth
+					var _node_value = this.getBestMove(_child, alpha, beta, true, callback, depth + 1);
+					//Updating best value
+					_best = Math.min(_best, _node_value);
+					beta = Math.min(_best, beta);
+					//Console Tracing Code
+					if (TRACE) {
+						if (depth == 0) {
+							console.log('%cMove ' + avail2[loopvar2] + ' yielded a heuristic value of ' + _node_value, parent_heuristic);
+						} else {
+							console.log('%cChild move ' + avail2[loopvar2] + ' yielded a heuristic value of ' + _node_value, child_heuristic);
+						}
+					}
+
+					//If it's the main function call, not a recursive one, map each heuristic value with it's moves indicies
+					if (depth == 0) {
+						//Comma seperated indicies if multiple moves have the same heuristic value
+						var moves = this.nodes_map.has(_node_value) ? this.nodes_map.get(_node_value) + ',' + avail2[loopvar2] : avail2[loopvar2];
+						this.nodes_map.set(_node_value, moves);
+					}
+				}
+				//If it's the main call, return the index of the best move or a random index if multiple indicies have the same value
+				if (depth == 0) {
+					if (typeof this.nodes_map.get(_best) == 'string') {
+						var arr = this.nodes_map.get(_best).split(',');
+						var rand = Math.floor(Math.random() * arr.length);
+						var ret = arr[rand];
+					} else {
+						ret = this.nodes_map.get(_best);
+					}
+					//Console Tracing Code
+					if (TRACE) {
+						this.nodes_map.forEach(function (index, value) {
+							console.log('%cMove(s) ' + index + ' yielded ' + value, all_moves);
+						});
+						console.log('%cMove ' + ret + ' was decided as the best move', best_move);
+					}
+					//run a callback after calculation and return the index
+					callback(ret);
+					return ret;
+				}
+				//If not main call (recursive) return the heuristic value for next calculation
+				return _best;
+			}
+		}
+	}]);
+
+	return Player;
 }();
 
 exports.default = Player;

@@ -66,11 +66,10 @@ function newGame(depth = -1, starting_player = 1)
 
 	//If computer is going to start, choose the center 
 	if(!starting) {
-		//let center_and_corners = [0,2,4,6,8];
-		//let first_choice = center_and_corners[Math.floor(Math.random()*center_and_corners.length)];
-		let first_choice = 4;
+		
+		
 		let symbol = !maximizing ? 'x' : 'o';
-		b.insert(symbol, first_choice);
+		b.insert(symbol, 4);
 		addClass(html_cells[first_choice], symbol);
 		player_turn = 1; //Switch turns
 	}
@@ -104,7 +103,7 @@ function newGame(depth = -1, starting_player = 1)
 
   			//Get computer's best move and update the UI
 
-  			p.getBestMove(b, !maximizing, best => {
+  			p.getBestMove(-100, 100, b, !maximizing, best => {
   				let symbol = !maximizing ? 'x' : 'o';
   				b.insert(symbol, best);
   				addClass(html_cells[best], symbol);

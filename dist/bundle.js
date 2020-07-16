@@ -602,10 +602,9 @@ function newGame() {
 
 	//If computer is going to start, choose the center
 	if (!starting) {
-
 		var symbol = !maximizing ? 'x' : 'o';
 		b.insert(symbol, 4);
-		addClass(html_cells[first_choice], symbol);
+		addClass(html_cells[4], symbol);
 		player_turn = 1; //Switch turns
 	}
 

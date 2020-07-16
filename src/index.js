@@ -66,11 +66,9 @@ function newGame(depth = -1, starting_player = 1)
 
 	//If computer is going to start, choose the center
 	if(!starting) {
-
-
-		let symbol = !maximizing ? 'x' : 'o';
+    let symbol = !maximizing ? 'x' : 'o';
 		b.insert(symbol, 4);
-		addClass(html_cells[first_choice], symbol);
+		addClass(html_cells[4], symbol);
 		player_turn = 1; //Switch turns
 	}
 

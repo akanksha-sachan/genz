@@ -464,7 +464,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var done = 0;
+var bestmov;
 //Helpers (from http://jaketrent.com/post/addremove-classes-raw-javascript/)
 function hasClass(el, className) {
   if (el.classList) return el.classList.contains(className);else return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
@@ -522,8 +522,7 @@ function newGame() {
 
   //If computer is going to start, choose a random cell as long as it is the center or a corner
   if (!starting) {
-    //let center_and_corners = [0,2,4,6,8];
-    //let first_choice = center_and_corners[Math.floor(Math.random()*center_and_corners.length)];
+
     var symbol = !maximizing ? 'x' : 'o';
     b.insert(symbol, 4);
     addClass(html_cells[4], symbol);
@@ -552,13 +551,13 @@ function newGame() {
       }
 
       player_turn = 0; //Switch turns
-      done = 0;
+
 
       //Get computer's best move and update the UI
 
 
       //Checking for horizontal wins
-      var bestmov = 100;
+      bestmov = 100;
       var lv1 = 0;
 
       for (lv1 = 0; lv1 < 9; lv1++) {
@@ -627,6 +626,7 @@ function newGame() {
       }
 
       if (bestmov != 100) {
+
         var _symbol = !maximizing ? 'x' : 'o';
         b.insert(_symbol, bestmov);
         addClass(html_cells[bestmov], _symbol);
@@ -640,14 +640,15 @@ function newGame() {
         }
 
         player_turn = 1; //Switch turns
-        done = 1;
       }
 
-      if (done == 0) {
+      if (bestmov == 100) {
         p.getBestMove(b, -100, 100, !maximizing, function (best) {
-          //let symbol = !maximizing ? 'x' : 'o';
+
+          var symbol = !maximizing ? 'x' : 'o';
           b.insert(symbol, best);
           addClass(html_cells[best], symbol);
+
           if (b.isTerminal()) {
             var _b$isTerminal3 = b.isTerminal(),
                 _winner2 = _b$isTerminal3.winner;
@@ -655,6 +656,7 @@ function newGame() {
             if (_winner2 !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_robot');
             drawWinningLine(b.isTerminal());
           }
+
           player_turn = 1; //Switch turns
         });
       }

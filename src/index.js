@@ -1,9 +1,8 @@
-
 import Board from './classes/Board';
 import Player from './classes/Player';
 import './style.scss';
 
-var done = 0;
+var bestmov;
 //Helpers (from http://jaketrent.com/post/addremove-classes-raw-javascript/)
 function hasClass(el, className) {
   if (el.classList)
@@ -61,8 +60,7 @@ function newGame(depth = -1, starting_player = 1) {
 
 	//If computer is going to start, choose a random cell as long as it is the center or a corner
 	if(!starting) {
-		//let center_and_corners = [0,2,4,6,8];
-		//let first_choice = center_and_corners[Math.floor(Math.random()*center_and_corners.length)];
+
 		let symbol = !maximizing ? 'x' : 'o';
 		b.insert(symbol, 4);
 		addClass(html_cells[4], symbol);
@@ -91,14 +89,15 @@ function newGame(depth = -1, starting_player = 1) {
   			}
 
   			player_turn = 0; //Switch turns
-  			done =0;
+
 
   			//Get computer's best move and update the UI
 
 
 
+
   			//Checking for horizontal wins
-  			var bestmov = 100;
+  			bestmov = 100;
   			var lv1=0;
 
   			for (lv1=0; lv1<9;lv1++)
@@ -181,8 +180,9 @@ function newGame(depth = -1, starting_player = 1) {
 
   		    if(bestmov!=100)
   		    {
-            let symbol = !maximizing ? 'x' : 'o';
-            b.insert(symbol, bestmov);
+
+  		    	let symbol = !maximizing ? 'x' : 'o';
+  		    	b.insert(symbol, bestmov);
   				addClass(html_cells[ bestmov ], symbol);
 
   				if(b.isTerminal())
@@ -193,24 +193,27 @@ function newGame(depth = -1, starting_player = 1) {
 	  			}
 
   				player_turn = 1; //Switch turns
- 				done = 1;
+
   		    }
 
 
 
-  			if(done ==0)
+  			if(bestmov == 100)
   			{
   				p.getBestMove(b, -100, 100, !maximizing, best =>
   				{
-  					//let symbol = !maximizing ? 'x' : 'o';
+
+  					let symbol = !maximizing ? 'x' : 'o';
   					b.insert(symbol, best);
   					addClass(html_cells[best], symbol);
+
   					if(b.isTerminal())
   					{
 	  					let { winner } = b.isTerminal();
 						if(winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_robot');
 	  					drawWinningLine(b.isTerminal());
 	  				}
+
   					player_turn = 1; //Switch turns
   				});
   			}

@@ -94,18 +94,7 @@ var Board = function () {
 
         this.state = state;
     }
-    //Logs a visualised board with the current state to the console
-    // printFormattedBoard() {
-    //     let formattedString = '';
-    //     this.state.forEach((cell, index) => {
-    //         formattedString += cell ? ` ${cell} |` : '   |';
-    //         if((index + 1) % 3 == 0)  {
-    //             formattedString = formattedString.slice(0,-1);
-    //             if(index < 8) formattedString += '\n\u2015\u2015\u2015 \u2015\u2015\u2015 \u2015\u2015\u2015\n';
-    //         }
-    //     });
-    //     console.log('%c' + formattedString, 'color: #6d4e42;font-size:16px');
-    // }
+
     //Checks if board has no symbols yet
 
 
@@ -116,6 +105,7 @@ var Board = function () {
                 return !cell;
             });
         }
+
         //Check if board has no spaces available
 
     }, {
@@ -125,6 +115,7 @@ var Board = function () {
                 return cell;
             });
         }
+
         /**
          * Inserts a new symbol(x,o) into
          * @param {String} symbol 
@@ -139,6 +130,7 @@ var Board = function () {
             this.state[position] = symbol;
             return true;
         }
+
         //Returns an array containing available moves for the current state
 
     }, {
@@ -150,6 +142,7 @@ var Board = function () {
             });
             return moves;
         }
+
         /**
          * Checks if the board has a terminal state ie. a player wins or the board is full with no winner
          * @return {Object} an object containing the winner, direction of winning and row number
@@ -261,7 +254,7 @@ var Player = function () {
 			//Throw an error if the first argument is not a board
 			if (board.constructor.name !== "Board") throw 'The first argument to the getBestMove method should be an instance of Board class.';
 			//Decides whether to log each tree iteration to the console
-			//const TRACE = window.trace_ttt; 
+			var TRACE = window.trace_ttt;
 			//clear nodes_map if the function is called for a new move
 			if (depth == 0) this.nodes_map.clear();
 
@@ -275,26 +268,33 @@ var Player = function () {
 				return 0;
 			}
 
-			// //Defining some styles for console logging
-			// const console_styles = {
-			// 	turn_and_available_moves: 'background: #7f3192; color: #fff; font-size:14px;padding: 0 5px;',
-			// 	exploring_parent: 'background: #353535;color: #fff;padding: 0 5px;font-size:18px',
-			// 	exploring_child: 'background: #f03;color: #fff;padding: 0 5px',
-			// 	parent_heuristic: 'background: #26d47c; color: #fff; font-size:14px;padding: 0 5px;',
-			// 	child_heuristic: 'background: #5f9ead; color: #fff; font-size:14px;padding: 0 5px;',
-			// 	all_moves: 'background: #e27a50;color: #fff;padding: 0 5px;font-size:14px',
-			// 	best_move: 'background: #e8602a;color: #fff;padding: 0 5px;font-size:18px'
-			// };
+			//Defining some styles for console logging
+			var console_styles = {
+				turn_and_available_moves: 'background: #7f3192; color: #fff; font-size:14px;padding: 0 5px;',
+				exploring_parent: 'background: #353535;color: #fff;padding: 0 5px;font-size:18px',
+				exploring_child: 'background: #f03;color: #fff;padding: 0 5px',
+				parent_heuristic: 'background: #26d47c; color: #fff; font-size:14px;padding: 0 5px;',
+				child_heuristic: 'background: #5f9ead; color: #fff; font-size:14px;padding: 0 5px;',
+				all_moves: 'background: #e27a50;color: #fff;padding: 0 5px;font-size:14px',
+				best_move: 'background: #e8602a;color: #fff;padding: 0 5px;font-size:18px'
+			};
 			//Destructuring Styles
-			//const {turn_and_available_moves, exploring_parent, exploring_child, child_heuristic, parent_heuristic, all_moves, best_move} = console_styles;
+			var turn_and_available_moves = console_styles.turn_and_available_moves,
+			    exploring_parent = console_styles.exploring_parent,
+			    exploring_child = console_styles.exploring_child,
+			    child_heuristic = console_styles.child_heuristic,
+			    parent_heuristic = console_styles.parent_heuristic,
+			    all_moves = console_styles.all_moves,
+			    best_move = console_styles.best_move;
 
-			// //Console Tracing Code
-			// if(TRACE) {
-			// 	let p = maximizing ? 'Maximizing' : 'Minimizing';
-			// 	console.log(`%c${p} player's turn Depth: ${depth}`, turn_and_available_moves);
-			// 	console.log(`%cAvailable Moves: ${board.getAvailableMoves().join(' ')}`, turn_and_available_moves);
-			// 	if(depth == 0) board.printFormattedBoard();
-			// }
+			//Console Tracing Code
+
+			if (TRACE) {
+				var p = maximizing ? 'Maximizing' : 'Minimizing';
+				console.log('%c' + p + ' player\'s turn Depth: ' + depth, turn_and_available_moves);
+				console.log('%cAvailable Moves: ' + board.getAvailableMoves().join(' '), turn_and_available_moves);
+				if (depth == 0) board.printFormattedBoard();
+			}
 
 			//Current player is maximizing
 			if (maximizing) {
@@ -309,12 +309,12 @@ var Player = function () {
 					//Create a child node by inserting the maximizing symbol x into the current emoty cell
 					child.insert('x', avail[loopvar1]);
 
-					// //Console Tracing Code
-					// if(TRACE) {
-					// 	let styles = (depth == 0) ? exploring_parent : exploring_child;
-					// 	console.log(`%cExploring move ${ avail[loopvar1] }`, styles);
-					// 	child.printFormattedBoard();
-					// }
+					//Console Tracing Code
+					if (TRACE) {
+						var styles = depth == 0 ? exploring_parent : exploring_child;
+						console.log('%cExploring move ' + avail[loopvar1], styles);
+						child.printFormattedBoard();
+					}
 
 					//Recursively calling getBestMove this time with the new board and minimizing turn and incrementing the depth
 					var node_value = this.getBestMove(child, alpha, beta, false, callback, depth + 1);
@@ -322,14 +322,14 @@ var Player = function () {
 					best = Math.max(best, node_value);
 					alpha = Math.max(alpha, best);
 
-					// //Console Tracing Code
-					// if(TRACE) {
-					// 	if(depth == 0) {
-					// 		console.log(`%cMove ${avail[loopvar1]} yielded a heuristic value of ${node_value}`, parent_heuristic);
-					// 	} else {
-					// 		console.log(`%cChild move ${avail[loopvar1]} yielded a heuristic value of ${node_value}`, child_heuristic);
-					// 	}
-					// }
+					//Console Tracing Code
+					if (TRACE) {
+						if (depth == 0) {
+							console.log('%cMove ' + avail[loopvar1] + ' yielded a heuristic value of ' + node_value, parent_heuristic);
+						} else {
+							console.log('%cChild move ' + avail[loopvar1] + ' yielded a heuristic value of ' + node_value, child_heuristic);
+						}
+					}
 
 					//If it's the main function call, not a recursive one, map each heuristic value with it's moves indicies
 					if (depth == 0) {
@@ -351,13 +351,13 @@ var Player = function () {
 					} else {
 						ret = this.nodes_map.get(best);
 					}
-					// //Console Tracing Code
-					// if(TRACE) {
-					// 	this.nodes_map.forEach((index , value) => {
-					// 		console.log(`%cMove(s) ${index} yielded ${value}`, all_moves);
-					// 	});
-					// 	console.log(`%cMove ${ret} was decided as the best move`, best_move);
-					// }
+					//Console Tracing Code
+					if (TRACE) {
+						this.nodes_map.forEach(function (index, value) {
+							console.log('%cMove(s) ' + index + ' yielded ' + value, all_moves);
+						});
+						console.log('%cMove ' + ret + ' was decided as the best move', best_move);
+					}
 					//run a callback after calculation and return the index
 					callback(ret);
 					return ret;
@@ -378,26 +378,26 @@ var Player = function () {
 					//Create a child node by inserting the minimizing symbol o into the current emoty cell
 					_child.insert('o', avail2[loopvar2]);
 
-					// //Console Tracing Code
-					// if(TRACE) {
-					// 	let styles = (depth == 0) ? exploring_parent : exploring_child; 
-					// 	console.log(`%cExploring move ${avail2[loopvar2]}`, styles);
-					// 	child.printFormattedBoard();
-					// }
+					//Console Tracing Code
+					if (TRACE) {
+						var _styles = depth == 0 ? exploring_parent : exploring_child;
+						console.log('%cExploring move ' + avail2[loopvar2], _styles);
+						_child.printFormattedBoard();
+					}
 
 					//Recursively calling getBestMove this time with the new board and maximizing turn and incrementing the depth
 					var _node_value = this.getBestMove(_child, alpha, beta, true, callback, depth + 1);
 					//Updating best value
 					_best = Math.min(_best, _node_value);
 					beta = Math.min(_best, beta);
-					// //Console Tracing Code
-					// if(TRACE) {
-					// 	if(depth == 0) {
-					// 		console.log(`%cMove ${avail2[loopvar2]} yielded a heuristic value of ${node_value}`, parent_heuristic);
-					// 	} else {
-					// 		console.log(`%cChild move ${avail2[loopvar2]} yielded a heuristic value of ${node_value}`, child_heuristic);
-					// 	}
-					// }
+					//Console Tracing Code
+					if (TRACE) {
+						if (depth == 0) {
+							console.log('%cMove ' + avail2[loopvar2] + ' yielded a heuristic value of ' + _node_value, parent_heuristic);
+						} else {
+							console.log('%cChild move ' + avail2[loopvar2] + ' yielded a heuristic value of ' + _node_value, child_heuristic);
+						}
+					}
 
 					//If it's the main function call, not a recursive one, map each heuristic value with it's moves indicies
 					if (depth == 0) {
@@ -415,13 +415,13 @@ var Player = function () {
 					} else {
 						ret = this.nodes_map.get(_best);
 					}
-					// //Console Tracing Code
-					// if(TRACE) {
-					// 	this.nodes_map.forEach(( index , value) => {
-					// 		console.log(`%cMove(s) ${index} yielded ${value}`, all_moves);
-					// 	});
-					// 	console.log(`%cMove ${ret} was decided as the best move`, best_move);
-					// }
+					//Console Tracing Code
+					if (TRACE) {
+						this.nodes_map.forEach(function (index, value) {
+							console.log('%cMove(s) ' + index + ' yielded ' + value, all_moves);
+						});
+						console.log('%cMove ' + ret + ' was decided as the best move', best_move);
+					}
 					//run a callback after calculation and return the index
 					callback(ret);
 					return ret;
@@ -464,19 +464,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var bestmov;
 //Helpers (from http://jaketrent.com/post/addremove-classes-raw-javascript/)
+
+//checks if it has class X or O
 function hasClass(el, className) {
-  if (el.classList) return el.classList.contains(className);else return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+	if (el.classList) return el.classList.contains(className);else return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
 }
+
+//adds X or O
 function addClass(el, className) {
-  if (el.classList) el.classList.add(className);else if (!hasClass(el, className)) el.className += " " + className;
+	if (el.classList) el.classList.add(className);else if (!hasClass(el, className)) el.className += " " + className;
 }
+
+//removes X or O
 function removeClass(el, className) {
-  if (el.classList) el.classList.remove(className);else if (hasClass(el, className)) {
-    var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
-    el.className = el.className.replace(reg, ' ');
-  }
+	if (el.classList) el.classList.remove(className);else if (hasClass(el, className)) {
+		var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+		el.className = el.className.replace(reg, ' ');
+	}
 }
 
 /*
@@ -484,218 +489,131 @@ Helper function that takes the object returned from isTerminal() and adds a
 class to the board that will handle drawing the winning line's animation
 */
 function drawWinningLine(_ref) {
-  var direction = _ref.direction,
-      row = _ref.row;
+	var direction = _ref.direction,
+	    row = _ref.row;
 
-  var board = document.getElementById("board");
-  board.className = '' + direction + row;
-  setTimeout(function () {
-    board.className += ' full';
-  }, 50);
+	var board = document.getElementById("board");
+	board.className = '' + direction + row;
+	setTimeout(function () {
+		board.className += ' full';
+	}, 50);
 }
 
 //Starts a new game with a certain depth and a starting_player of 1 if human is going to start
 function newGame() {
-  var depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
-  var starting_player = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+	var depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
+	var starting_player = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
 
-  //Instantiating a new player and an empty board
-  var p = new _Player2.default(parseInt(depth));
-  var b = new _Board2.default(['', '', '', '', '', '', '', '', '']);
+	//Instantiating a new player and an empty board
+	var p = new _Player2.default(parseInt(depth));
+	var b = new _Board2.default(['', '', '', '', '', '', '', '', '']);
 
-  //Clearing all #Board classes and populating cells HTML
-  var board = document.getElementById("board");
-  board.className = '';
-  board.innerHTML = '<div class="cell-0"></div><div class="cell-1"></div><div class="cell-2"></div><div class="cell-3"></div><div class="cell-4"></div><div class="cell-5"></div><div class="cell-6"></div><div class="cell-7"></div><div class="cell-8"></div>';
+	//Clearing all #Board classes and populating cells HTML
+	var board = document.getElementById("board");
+	board.className = '';
+	board.innerHTML = '<div class="cell-0"></div><div class="cell-1"></div><div class="cell-2"></div><div class="cell-3"></div><div class="cell-4"></div><div class="cell-5"></div><div class="cell-6"></div><div class="cell-7"></div><div class="cell-8"></div>';
 
-  //Clearing all celebrations classes
-  removeClass(document.getElementById("charachters"), 'celebrate_human');
-  removeClass(document.getElementById("charachters"), 'celebrate_robot');
+	//Clearing all celebrations classes
+	removeClass(document.getElementById("charachters"), 'celebrate_human');
+	removeClass(document.getElementById("charachters"), 'celebrate_robot');
 
-  //Storing HTML cells in an array
-  var html_cells = [].concat(_toConsumableArray(board.children));
+	//Storing HTML cells in an array
+	var html_cells = [].concat(_toConsumableArray(board.children));
 
-  //Initializing some variables for internal use
-  var starting = parseInt(starting_player),
-      maximizing = starting,
-      player_turn = starting;
+	//Initializing some variables for internal use
+	var starting = parseInt(starting_player),
+	    maximizing = starting,
+	    player_turn = starting;
 
-  //If computer is going to start, choose a random cell as long as it is the center or a corner
-  if (!starting) {
+	//If computer is going to start, choose the center
+	if (!starting) {
+		var symbol = !maximizing ? 'x' : 'o';
+		b.insert(symbol, 4);
+		addClass(html_cells[4], symbol);
+		player_turn = 1; //Switch turns
+	}
 
-    var symbol = !maximizing ? 'x' : 'o';
-    b.insert(symbol, 4);
-    addClass(html_cells[4], symbol);
-    player_turn = 1; //Switch turns
-  }
+	//Adding Click event listener for each cell
+	b.state.forEach(function (cell, index) {
+		html_cells[index].addEventListener('click', function () {
 
-  //Adding Click event listener for each cell
-  b.state.forEach(function (cell, index) {
-    html_cells[index].addEventListener('click', function () {
-      //If cell is already occupied or the board is in a terminal state or it's not humans turn, return false
-      if (hasClass(html_cells[index], 'x') || hasClass(html_cells[index], 'o') || b.isTerminal() || !player_turn) return false;
+			//If cell is already occupied or the board is in a terminal state or it's not humans turn, return false
 
-      var symbol = maximizing ? 'x' : 'o'; //Maximizing player is always 'x'
+			if (hasClass(html_cells[index], 'x') || hasClass(html_cells[index], 'o') || b.isTerminal() || !player_turn) return false;
 
-      //Update the Board class instance as well as the Board UI
-      b.insert(symbol, index);
-      addClass(html_cells[index], symbol);
+			var symbol = maximizing ? 'x' : 'o'; //Maximizing player is always 'x'
 
-      //If it's a terminal move and it's not a draw, then human won
-      if (b.isTerminal()) {
-        var _b$isTerminal = b.isTerminal(),
-            winner = _b$isTerminal.winner;
+			//Update the Board class instance as well as the Board UI
 
-        if (winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_human');
-        drawWinningLine(b.isTerminal());
-      }
+			b.insert(symbol, index);
+			addClass(html_cells[index], symbol);
 
-      player_turn = 0; //Switch turns
+			//If it's a terminal move and it's not a draw, then human won
 
+			if (b.isTerminal()) {
+				var _b$isTerminal = b.isTerminal(),
+				    winner = _b$isTerminal.winner;
 
-      //Get computer's best move and update the UI
+				if (winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_human');
+				drawWinningLine(b.isTerminal());
+			}
 
+			player_turn = 0; //Switch turns
 
-      //Checking for horizontal wins
-      bestmov = 100;
-      var lv1 = 0;
+			//Get computer's best move and update the UI
 
-      for (lv1 = 0; lv1 < 9; lv1++) {
-        if (b.state[lv1] == b.state[lv1 + 1] && b.state[lv1]) {
-          if (lv1 == 0 || lv1 == 3 || lv1 == 6) {
-            bestmov = lv1 + 2;
-          }
+			p.getBestMove(b, -100, 100, !maximizing, function (best) {
+				var symbol = !maximizing ? 'x' : 'o';
+				b.insert(symbol, best);
+				addClass(html_cells[best], symbol);
+				if (b.isTerminal()) {
+					var _b$isTerminal2 = b.isTerminal(),
+					    _winner = _b$isTerminal2.winner;
 
-          if (lv1 == 1 || lv1 == 4 || lv1 == 7) {
-            bestmov = lv1 - 1;
-          }
-        }
+					if (_winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_robot');
+					drawWinningLine(b.isTerminal());
+				}
 
-        if (b.state[lv1] == b.state[lv1 + 2] && b.state[lv1]) {
-          if (lv1 == 0 || lv1 == 3 || lv1 == 6) {
-            bestmov = lv1 + 1;
-          }
-        }
-      }
-
-      //Checking for vertical wins
-
-      var lv2 = 0;
-
-      for (lv2 = 0; lv1 < 3; lv1++) {
-        if (b.state[lv1] == b.state[lv1 + 3] && b.state[lv1]) {
-          bestmov = lv1 + 6;
-        }
-
-        if (b.state[lv1] == b.state[lv1 + 6] && b.state[lv1]) {
-          bestmov = lv1 + 3;
-        }
-      }
-
-      if (b.state[3] == b.state[6] && b.state[3]) {
-        bestmov = 0;
-      }
-
-      if (b.state[4] == b.state[7] && b.state[4]) {
-        bestmov = 1;
-      }
-
-      if (b.state[5] == b.state[8] && b.state[5]) {
-        bestmov = 2;
-      }
-
-      //Checking for diagonal wins
-
-      if (b.state[0] == b.state[4] && b.state[0]) {
-        bestmov = 8;
-      }
-      if (b.state[0] == b.state[8] && b.state[0]) {
-        bestmov = 4;
-      }
-      if (b.state[4] == b.state[8] && b.state[4]) {
-        bestmov = 0;
-      }
-      if (b.state[2] == b.state[4] && b.state[2]) {
-        bestmov = 6;
-      }
-      if (b.state[2] == b.state[6] && b.state[2]) {
-        bestmov = 4;
-      }
-      if (b.state[4] == b.state[6] && b.state[4]) {
-        bestmov = 2;
-      }
-
-      if (bestmov != 100) {
-
-        var _symbol = !maximizing ? 'x' : 'o';
-        b.insert(_symbol, bestmov);
-        addClass(html_cells[bestmov], _symbol);
-
-        if (b.isTerminal()) {
-          var _b$isTerminal2 = b.isTerminal(),
-              _winner = _b$isTerminal2.winner;
-
-          if (_winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_robot');
-          drawWinningLine(b.isTerminal());
-        }
-
-        player_turn = 1; //Switch turns
-      }
-
-      if (bestmov == 100) {
-        p.getBestMove(b, -100, 100, !maximizing, function (best) {
-
-          var symbol = !maximizing ? 'x' : 'o';
-          b.insert(symbol, best);
-          addClass(html_cells[best], symbol);
-
-          if (b.isTerminal()) {
-            var _b$isTerminal3 = b.isTerminal(),
-                _winner2 = _b$isTerminal3.winner;
-
-            if (_winner2 !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_robot');
-            drawWinningLine(b.isTerminal());
-          }
-
-          player_turn = 1; //Switch turns
-        });
-      }
-    }, false);
-    if (cell) addClass(html_cells[index], cell);
-  });
+				player_turn = 1; //Switch turns
+			});
+		}, false);
+		if (cell) addClass(html_cells[index], cell);
+	});
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
 
-  //Start a new game when page loads with default values
-  var depth = -1;
-  var starting_player = 1;
-  newGame(depth, starting_player);
+	//Start a new game when page loads with default values
 
-  //Events handlers for depth, starting player options
-  document.getElementById("depth").addEventListener("click", function (event) {
-    if (event.target.tagName !== "LI" || hasClass(event.target, 'active')) return;
-    var depth_choices = [].concat(_toConsumableArray(document.getElementById("depth").children[0].children));
-    depth_choices.forEach(function (choice) {
-      removeClass(choice, 'active');
-    });
-    addClass(event.target, 'active');
-    depth = event.target.dataset.value;
-  }, false);
+	var depth = -1;
+	var starting_player = 1;
+	newGame(depth, starting_player);
 
-  document.getElementById("starting_player").addEventListener("click", function (event) {
-    if (event.target.tagName !== "LI" || hasClass(event.target, 'active')) return;
-    var starting_player_choices = [].concat(_toConsumableArray(document.getElementById("starting_player").children[0].children));
-    starting_player_choices.forEach(function (choice) {
-      removeClass(choice, 'active');
-    });
-    addClass(event.target, 'active');
-    starting_player = event.target.dataset.value;
-  }, false);
+	//Events handlers for depth, starting player options
 
-  document.getElementById("newgame").addEventListener('click', function () {
-    newGame(depth, starting_player);
-  });
+	document.getElementById("depth").addEventListener("click", function (event) {
+		if (event.target.tagName !== "LI" || hasClass(event.target, 'active')) return;
+		var depth_choices = [].concat(_toConsumableArray(document.getElementById("depth").children[0].children));
+		depth_choices.forEach(function (choice) {
+			removeClass(choice, 'active');
+		});
+		addClass(event.target, 'active');
+		depth = event.target.dataset.value;
+	}, false);
+
+	document.getElementById("starting_player").addEventListener("click", function (event) {
+		if (event.target.tagName !== "LI" || hasClass(event.target, 'active')) return;
+		var starting_player_choices = [].concat(_toConsumableArray(document.getElementById("starting_player").children[0].children));
+		starting_player_choices.forEach(function (choice) {
+			removeClass(choice, 'active');
+		});
+		addClass(event.target, 'active');
+		starting_player = event.target.dataset.value;
+	}, false);
+
+	document.getElementById("newgame").addEventListener('click', function () {
+		newGame(depth, starting_player);
+	});
 });
 
 /***/ }

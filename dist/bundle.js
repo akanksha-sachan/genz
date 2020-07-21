@@ -95,24 +95,21 @@ var Board = function () {
         this.state = state;
     }
     //Logs a visualised board with the current state to the console
+    // printFormattedBoard() {
+    //     let formattedString = '';
+    //     this.state.forEach((cell, index) => {
+    //         formattedString += cell ? ` ${cell} |` : '   |';
+    //         if((index + 1) % 3 == 0)  {
+    //             formattedString = formattedString.slice(0,-1);
+    //             if(index < 8) formattedString += '\n\u2015\u2015\u2015 \u2015\u2015\u2015 \u2015\u2015\u2015\n';
+    //         }
+    //     });
+    //     console.log('%c' + formattedString, 'color: #6d4e42;font-size:16px');
+    // }
+    //Checks if board has no symbols yet
 
 
     _createClass(Board, [{
-        key: 'printFormattedBoard',
-        value: function printFormattedBoard() {
-            var formattedString = '';
-            this.state.forEach(function (cell, index) {
-                formattedString += cell ? ' ' + cell + ' |' : '   |';
-                if ((index + 1) % 3 == 0) {
-                    formattedString = formattedString.slice(0, -1);
-                    if (index < 8) formattedString += '\n\u2015\u2015\u2015 \u2015\u2015\u2015 \u2015\u2015\u2015\n';
-                }
-            });
-            console.log('%c' + formattedString, 'color: #6d4e42;font-size:16px');
-        }
-        //Checks if board has no symbols yet
-
-    }, {
         key: 'isEmpty',
         value: function isEmpty() {
             return this.state.every(function (cell) {
@@ -264,7 +261,7 @@ var Player = function () {
 			//Throw an error if the first argument is not a board
 			if (board.constructor.name !== "Board") throw 'The first argument to the getBestMove method should be an instance of Board class.';
 			//Decides whether to log each tree iteration to the console
-			var TRACE = window.trace_ttt;
+			//const TRACE = window.trace_ttt; 
 			//clear nodes_map if the function is called for a new move
 			if (depth == 0) this.nodes_map.clear();
 
@@ -278,33 +275,26 @@ var Player = function () {
 				return 0;
 			}
 
-			//Defining some styles for console logging
-			var console_styles = {
-				turn_and_available_moves: 'background: #7f3192; color: #fff; font-size:14px;padding: 0 5px;',
-				exploring_parent: 'background: #353535;color: #fff;padding: 0 5px;font-size:18px',
-				exploring_child: 'background: #f03;color: #fff;padding: 0 5px',
-				parent_heuristic: 'background: #26d47c; color: #fff; font-size:14px;padding: 0 5px;',
-				child_heuristic: 'background: #5f9ead; color: #fff; font-size:14px;padding: 0 5px;',
-				all_moves: 'background: #e27a50;color: #fff;padding: 0 5px;font-size:14px',
-				best_move: 'background: #e8602a;color: #fff;padding: 0 5px;font-size:18px'
-			};
+			// //Defining some styles for console logging
+			// const console_styles = {
+			// 	turn_and_available_moves: 'background: #7f3192; color: #fff; font-size:14px;padding: 0 5px;',
+			// 	exploring_parent: 'background: #353535;color: #fff;padding: 0 5px;font-size:18px',
+			// 	exploring_child: 'background: #f03;color: #fff;padding: 0 5px',
+			// 	parent_heuristic: 'background: #26d47c; color: #fff; font-size:14px;padding: 0 5px;',
+			// 	child_heuristic: 'background: #5f9ead; color: #fff; font-size:14px;padding: 0 5px;',
+			// 	all_moves: 'background: #e27a50;color: #fff;padding: 0 5px;font-size:14px',
+			// 	best_move: 'background: #e8602a;color: #fff;padding: 0 5px;font-size:18px'
+			// };
 			//Destructuring Styles
-			var turn_and_available_moves = console_styles.turn_and_available_moves,
-			    exploring_parent = console_styles.exploring_parent,
-			    exploring_child = console_styles.exploring_child,
-			    child_heuristic = console_styles.child_heuristic,
-			    parent_heuristic = console_styles.parent_heuristic,
-			    all_moves = console_styles.all_moves,
-			    best_move = console_styles.best_move;
+			//const {turn_and_available_moves, exploring_parent, exploring_child, child_heuristic, parent_heuristic, all_moves, best_move} = console_styles;
 
-			//Console Tracing Code
-
-			if (TRACE) {
-				var p = maximizing ? 'Maximizing' : 'Minimizing';
-				console.log('%c' + p + ' player\'s turn Depth: ' + depth, turn_and_available_moves);
-				console.log('%cAvailable Moves: ' + board.getAvailableMoves().join(' '), turn_and_available_moves);
-				if (depth == 0) board.printFormattedBoard();
-			}
+			// //Console Tracing Code
+			// if(TRACE) {
+			// 	let p = maximizing ? 'Maximizing' : 'Minimizing';
+			// 	console.log(`%c${p} player's turn Depth: ${depth}`, turn_and_available_moves);
+			// 	console.log(`%cAvailable Moves: ${board.getAvailableMoves().join(' ')}`, turn_and_available_moves);
+			// 	if(depth == 0) board.printFormattedBoard();
+			// }
 
 			//Current player is maximizing
 			if (maximizing) {
@@ -319,12 +309,12 @@ var Player = function () {
 					//Create a child node by inserting the maximizing symbol x into the current emoty cell
 					child.insert('x', avail[loopvar1]);
 
-					//Console Tracing Code
-					if (TRACE) {
-						var styles = depth == 0 ? exploring_parent : exploring_child;
-						console.log('%cExploring move ' + avail[loopvar1], styles);
-						child.printFormattedBoard();
-					}
+					// //Console Tracing Code
+					// if(TRACE) {
+					// 	let styles = (depth == 0) ? exploring_parent : exploring_child;
+					// 	console.log(`%cExploring move ${ avail[loopvar1] }`, styles);
+					// 	child.printFormattedBoard();
+					// }
 
 					//Recursively calling getBestMove this time with the new board and minimizing turn and incrementing the depth
 					var node_value = this.getBestMove(child, alpha, beta, false, callback, depth + 1);
@@ -332,14 +322,14 @@ var Player = function () {
 					best = Math.max(best, node_value);
 					alpha = Math.max(alpha, best);
 
-					//Console Tracing Code
-					if (TRACE) {
-						if (depth == 0) {
-							console.log('%cMove ' + avail[loopvar1] + ' yielded a heuristic value of ' + node_value, parent_heuristic);
-						} else {
-							console.log('%cChild move ' + avail[loopvar1] + ' yielded a heuristic value of ' + node_value, child_heuristic);
-						}
-					}
+					// //Console Tracing Code
+					// if(TRACE) {
+					// 	if(depth == 0) {
+					// 		console.log(`%cMove ${avail[loopvar1]} yielded a heuristic value of ${node_value}`, parent_heuristic);
+					// 	} else {
+					// 		console.log(`%cChild move ${avail[loopvar1]} yielded a heuristic value of ${node_value}`, child_heuristic);
+					// 	}
+					// }
 
 					//If it's the main function call, not a recursive one, map each heuristic value with it's moves indicies
 					if (depth == 0) {
@@ -361,13 +351,13 @@ var Player = function () {
 					} else {
 						ret = this.nodes_map.get(best);
 					}
-					//Console Tracing Code
-					if (TRACE) {
-						this.nodes_map.forEach(function (index, value) {
-							console.log('%cMove(s) ' + index + ' yielded ' + value, all_moves);
-						});
-						console.log('%cMove ' + ret + ' was decided as the best move', best_move);
-					}
+					// //Console Tracing Code
+					// if(TRACE) {
+					// 	this.nodes_map.forEach((index , value) => {
+					// 		console.log(`%cMove(s) ${index} yielded ${value}`, all_moves);
+					// 	});
+					// 	console.log(`%cMove ${ret} was decided as the best move`, best_move);
+					// }
 					//run a callback after calculation and return the index
 					callback(ret);
 					return ret;
@@ -388,26 +378,26 @@ var Player = function () {
 					//Create a child node by inserting the minimizing symbol o into the current emoty cell
 					_child.insert('o', avail2[loopvar2]);
 
-					//Console Tracing Code
-					if (TRACE) {
-						var _styles = depth == 0 ? exploring_parent : exploring_child;
-						console.log('%cExploring move ' + avail2[loopvar2], _styles);
-						_child.printFormattedBoard();
-					}
+					// //Console Tracing Code
+					// if(TRACE) {
+					// 	let styles = (depth == 0) ? exploring_parent : exploring_child; 
+					// 	console.log(`%cExploring move ${avail2[loopvar2]}`, styles);
+					// 	child.printFormattedBoard();
+					// }
 
 					//Recursively calling getBestMove this time with the new board and maximizing turn and incrementing the depth
 					var _node_value = this.getBestMove(_child, alpha, beta, true, callback, depth + 1);
 					//Updating best value
 					_best = Math.min(_best, _node_value);
 					beta = Math.min(_best, beta);
-					//Console Tracing Code
-					if (TRACE) {
-						if (depth == 0) {
-							console.log('%cMove ' + avail2[loopvar2] + ' yielded a heuristic value of ' + _node_value, parent_heuristic);
-						} else {
-							console.log('%cChild move ' + avail2[loopvar2] + ' yielded a heuristic value of ' + _node_value, child_heuristic);
-						}
-					}
+					// //Console Tracing Code
+					// if(TRACE) {
+					// 	if(depth == 0) {
+					// 		console.log(`%cMove ${avail2[loopvar2]} yielded a heuristic value of ${node_value}`, parent_heuristic);
+					// 	} else {
+					// 		console.log(`%cChild move ${avail2[loopvar2]} yielded a heuristic value of ${node_value}`, child_heuristic);
+					// 	}
+					// }
 
 					//If it's the main function call, not a recursive one, map each heuristic value with it's moves indicies
 					if (depth == 0) {
@@ -425,13 +415,13 @@ var Player = function () {
 					} else {
 						ret = this.nodes_map.get(_best);
 					}
-					//Console Tracing Code
-					if (TRACE) {
-						this.nodes_map.forEach(function (index, value) {
-							console.log('%cMove(s) ' + index + ' yielded ' + value, all_moves);
-						});
-						console.log('%cMove ' + ret + ' was decided as the best move', best_move);
-					}
+					// //Console Tracing Code
+					// if(TRACE) {
+					// 	this.nodes_map.forEach(( index , value) => {
+					// 		console.log(`%cMove(s) ${index} yielded ${value}`, all_moves);
+					// 	});
+					// 	console.log(`%cMove ${ret} was decided as the best move`, best_move);
+					// }
 					//run a callback after calculation and return the index
 					callback(ret);
 					return ret;
@@ -489,7 +479,7 @@ function removeClass(el, className) {
 }
 
 /*
-Helper function that takes the object returned from isTerminal() and adds a
+Helper function that takes the object returned from isTerminal() and adds a 
 class to the board that will handle drawing the winning line's animation
 */
 function drawWinningLine(_ref) {
@@ -529,10 +519,9 @@ function newGame() {
 	    maximizing = starting,
 	    player_turn = starting;
 
-	//If computer is going to start, choose a random cell as long as it is the center or a corner
+	//If computer is going to start, choose the center
 	if (!starting) {
-		//let center_and_corners = [0,2,4,6,8];
-		//let first_choice = center_and_corners[Math.floor(Math.random()*center_and_corners.length)];
+
 		var symbol = !maximizing ? 'x' : 'o';
 		b.insert(symbol, 4);
 		addClass(html_cells[4], symbol);

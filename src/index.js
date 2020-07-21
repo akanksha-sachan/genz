@@ -24,7 +24,7 @@ function removeClass(el, className) {
 }
 
 /*
-Helper function that takes the object returned from isTerminal() and adds a
+Helper function that takes the object returned from isTerminal() and adds a 
 class to the board that will handle drawing the winning line's animation
 */
 function drawWinningLine({ direction, row }) {
@@ -44,7 +44,7 @@ function newGame(depth = -1, starting_player = 1) {
 	let board = document.getElementById("board");
 	board.className = '';
 	board.innerHTML = '<div class="cell-0"></div><div class="cell-1"></div><div class="cell-2"></div><div class="cell-3"></div><div class="cell-4"></div><div class="cell-5"></div><div class="cell-6"></div><div class="cell-7"></div><div class="cell-8"></div>';
-
+	
 	//Clearing all celebrations classes
 	removeClass(document.getElementById("charachters"), 'celebrate_human');
 	removeClass(document.getElementById("charachters"), 'celebrate_robot');
@@ -57,10 +57,10 @@ function newGame(depth = -1, starting_player = 1) {
 		maximizing = starting,
 		player_turn = starting;
 
-	//If computer is going to start, choose a random cell as long as it is the center or a corner
-	if(!starting) {
-		//let center_and_corners = [0,2,4,6,8];
-		//let first_choice = center_and_corners[Math.floor(Math.random()*center_and_corners.length)];
+	//If computer is going to start, choose the center
+	if(!starting)
+	{
+		
 		let symbol = !maximizing ? 'x' : 'o';
 		b.insert(symbol, 4);
 		addClass(html_cells[4], symbol);
@@ -104,7 +104,7 @@ function newGame(depth = -1, starting_player = 1) {
   	});
 }
 
-document.addEventListener("DOMContentLoaded", event => {
+document.addEventListener("DOMContentLoaded", event => { 
 
 	//Start a new game when page loads with default values
 	let depth = -1;

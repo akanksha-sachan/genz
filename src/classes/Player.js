@@ -32,7 +32,7 @@ class Player {
   			
   			for (lv1=0; lv1<9;lv1++)
   			{
-  				if( board.state[lv1] == board.state[lv1 + 1] && board.state[lv1] ) 
+  				if( board.state[lv1] == board.state[lv1 + 1] && (board.state[lv1]!='') ) 
   				{
   		      		if( lv1==0 || lv1==3 || lv1==6 && (board.state[lv1 + 2]=='') )
   		      		{
@@ -49,7 +49,7 @@ class Player {
   		      		}
 		        }
 
-		        if( board.state[lv1] == board.state[lv1 + 2] && board.state[lv1] && (board.state[lv1+1]=='') ) 
+		        if( board.state[lv1] == board.state[lv1 + 2] && (board.state[lv1]!='') && (board.state[lv1+1]=='') ) 
   				{
   		      		if( lv1==0 || lv1==3 || lv1==6)
   		      		{
@@ -67,14 +67,14 @@ class Player {
 
   		    for (lv2=0; lv1<3;lv1++)
   			{
-  				if( board.state[lv1] == board.state[lv1 + 3] && board.state[lv1] && (board.state[lv1+6]=='')) 
+  				if( board.state[lv1] == board.state[lv1 + 3] && (board.state[lv1]!='') && (board.state[lv1+6]=='')) 
   				{
   		         	bestmov =  (lv1 + 6);
   		         	callback(bestmov);
   		      		return bestmov;
   				}
 
-		        if( board.state[lv1] == board.state[lv1 + 6] && board.state[lv1] && (board.state[lv1+3]=='')) 
+		        if( board.state[lv1] == board.state[lv1 + 6] && (board.state[lv1]!='') && (board.state[lv1+3]=='')) 
   				{
   		      		bestmov =  (lv1 + 3); 
   		      		callback(bestmov);
@@ -82,21 +82,21 @@ class Player {
   		      	}
   			}
   		      
-  		    if(board.state[3] == board.state[6] && board.state[3] && (board.state[0]==''))
+  		    if(board.state[3] == board.state[6] && (board.state[3]!='') && (board.state[0]==''))
   		    {
   		      	bestmov =  0; 
   		      	callback(bestmov);
   		      	return bestmov;		          
   		    }
 
-  		    if(board.state[4] == board.state[7] && board.state[4] && (board.state[1]==''))
+  		    if(board.state[4] == board.state[7] && (board.state[4]!='') && (board.state[1]==''))
   		    {
   		      	bestmov =  1;
   		      	callback(bestmov);
   		      	return bestmov;	  		          
   		    }
 
-  		    if(board.state[5] == board.state[8] && board.state[5] && (board.state[2]==''))
+  		    if(board.state[5] == board.state[8] && (board.state[5]!='') && (board.state[2]==''))
   		    {
   		      	bestmov =  2;
   		      	callback(bestmov);
@@ -105,17 +105,17 @@ class Player {
   		    
   		    //Checking for diagonal wins  		    
 
-  		    if(board.state[0] == board.state[4] && board.state[0] && (board.state[8]=='')) {
+  		    if(board.state[0] == board.state[4] && (board.state[0]!='') && (board.state[8]=='')) {
   		          bestmov =  8;
   		          callback(bestmov);
   		      	return bestmov;	
   		    }
-  		    if(board.state[0] == board.state[8] && board.state[0] && (board.state[4]=='')) {
+  		    if(board.state[0] == board.state[8] && (board.state[0]!='') && (board.state[4]=='')) {
   		          bestmov =  4;
   		          callback(bestmov);
   		      	return bestmov;	
   		    }
-  		    if(board.state[4] == board.state[8] && board.state[4] && (board.state[0]=='')) {
+  		    if(board.state[4] == board.state[8] && (board.state[0]!='') && (board.state[0]=='')) {
   		          bestmov =  0;
   		          callback(bestmov);
   		      	return bestmov;	

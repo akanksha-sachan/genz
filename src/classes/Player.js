@@ -26,6 +26,7 @@ class Player {
 		//clear nodes_map if the function is called for a new move
 		if(depth == 0) this.nodes_map.clear();
 		//Checking for horizontal wins
+			var bestmov = 100;
   			
   			var lv1=0;
   			
@@ -35,12 +36,16 @@ class Player {
   				{
   		      		if( lv1==0 || lv1==3 || lv1==6 && (board.state[lv1 + 2]=='') )
   		      		{
-  		      			return  (lv1 + 2);
+  		      			bestmov =  (lv1 + 2);
+  		      			callback(bestmov);
+  		      			return bestmov;
   					}
 
   		      		if( lv1==1 || lv1==4 || lv1==7 &&  (board.state[lv1 - 1]=='') )
   		      		{
-  		      			return  (lv1 - 1);	
+  		      			bestmov =  (lv1 - 1);	
+  		      			callback(bestmov);
+  		      			return bestmov;
   		      		}
 		        }
 
@@ -48,7 +53,9 @@ class Player {
   				{
   		      		if( lv1==0 || lv1==3 || lv1==6)
   		      		{
-  		      			return  (lv1 + 1);
+  		      			bestmov =  (lv1 + 1);
+  		      			callback(bestmov);
+  		      			return bestmov;
   		      		}
   		      	}
   			}		      
@@ -62,49 +69,71 @@ class Player {
   			{
   				if( board.state[lv1] == board.state[lv1 + 3] && board.state[lv1] && (board.state[lv1+6]=='')) 
   				{
-  		         	return  (lv1 + 6);
+  		         	bestmov =  (lv1 + 6);
+  		         	callback(bestmov);
+  		      		return bestmov;
   				}
 
 		        if( board.state[lv1] == board.state[lv1 + 6] && board.state[lv1] && (board.state[lv1+3]=='')) 
   				{
-  		      		return  (lv1 + 3);  		      				      		
+  		      		bestmov =  (lv1 + 3); 
+  		      		callback(bestmov);
+  		      		return bestmov; 		      				      		
   		      	}
   			}
   		      
   		    if(board.state[3] == board.state[6] && board.state[3] && (board.state[0]==''))
   		    {
-  		      	return  0; 		          
+  		      	bestmov =  0; 
+  		      	callback(bestmov);
+  		      	return bestmov;		          
   		    }
 
   		    if(board.state[4] == board.state[7] && board.state[4] && (board.state[1]==''))
   		    {
-  		      	return  1;  		          
+  		      	bestmov =  1;
+  		      	callback(bestmov);
+  		      	return bestmov;	  		          
   		    }
 
   		    if(board.state[5] == board.state[8] && board.state[5] && (board.state[2]==''))
   		    {
-  		      	return  2;  		          
+  		      	bestmov =  2;
+  		      	callback(bestmov);
+  		      	return bestmov;	  		          
   		    }       
   		    
   		    //Checking for diagonal wins  		    
 
   		    if(board.state[0] == board.state[4] && board.state[0] && (board.state[8]=='')) {
-  		          return  8;
+  		          bestmov =  8;
+  		          callback(bestmov);
+  		      	return bestmov;	
   		    }
   		    if(board.state[0] == board.state[8] && board.state[0] && (board.state[4]=='')) {
-  		          return  4;
+  		          bestmov =  4;
+  		          callback(bestmov);
+  		      	return bestmov;	
   		    }
   		    if(board.state[4] == board.state[8] && board.state[4] && (board.state[0]=='')) {
-  		          return  0;
+  		          bestmov =  0;
+  		          callback(bestmov);
+  		      	return bestmov;	
   		    }
   		    if(board.state[2] == board.state[4] && board.state[2] && (board.state[6]=='')) {
-  		          return  6;
+  		          bestmov =  6;
+  		          callback(bestmov);
+  		      	return bestmov;	
   		    }
   		    if(board.state[2] == board.state[6] && board.state[2] && (board.state[4]=='')) {
-  		          return  4;
+  		          bestmov =  4;
+  		          callback(bestmov);
+  		      	return bestmov;	
   		    }
   		    if(board.state[4] == board.state[6] && board.state[4] && (board.state[2]=='')) {
-  		          return  2; 
+  		          bestmov =  2;
+  		          callback(bestmov);
+  		      	return bestmov;	 
   		    }
 
 		//If the board state is a terminal one, return the heuristic value

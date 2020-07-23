@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -68,7 +68,7 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
@@ -130,7 +130,7 @@ var Board = function () {
         }
         /**
          * Inserts a new symbol(x,o) into
-         * @param {String} symbol
+         * @param {String} symbol 
          * @param {Number} position
          * @return {Boolean} boolean represent success of the operation
          */
@@ -209,9 +209,9 @@ var Board = function () {
 
 exports.default = Board;
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
@@ -267,6 +267,74 @@ var Player = function () {
 			var TRACE = window.trace_ttt;
 			//clear nodes_map if the function is called for a new move
 			if (depth == 0) this.nodes_map.clear();
+			//Checking for horizontal wins
+
+			var lv1 = 0;
+
+			for (lv1 = 0; lv1 < 9; lv1++) {
+				if (board.state[lv1] == board.state[lv1 + 1] && board.state[lv1]) {
+					if (lv1 == 0 || lv1 == 3 || lv1 == 6 && board.state[lv1 + 2] == '') {
+						return lv1 + 2;
+					}
+
+					if (lv1 == 1 || lv1 == 4 || lv1 == 7 && board.state[lv1 - 1] == '') {
+						return lv1 - 1;
+					}
+				}
+
+				if (board.state[lv1] == board.state[lv1 + 2] && board.state[lv1] && board.state[lv1 + 1] == '') {
+					if (lv1 == 0 || lv1 == 3 || lv1 == 6) {
+						return lv1 + 1;
+					}
+				}
+			}
+
+			//Checking for vertical wins
+
+			var lv2 = 0;
+
+			for (lv2 = 0; lv1 < 3; lv1++) {
+				if (board.state[lv1] == board.state[lv1 + 3] && board.state[lv1] && board.state[lv1 + 6] == '') {
+					return lv1 + 6;
+				}
+
+				if (board.state[lv1] == board.state[lv1 + 6] && board.state[lv1] && board.state[lv1 + 3] == '') {
+					return lv1 + 3;
+				}
+			}
+
+			if (board.state[3] == board.state[6] && board.state[3] && board.state[0] == '') {
+				return 0;
+			}
+
+			if (board.state[4] == board.state[7] && board.state[4] && board.state[1] == '') {
+				return 1;
+			}
+
+			if (board.state[5] == board.state[8] && board.state[5] && board.state[2] == '') {
+				return 2;
+			}
+
+			//Checking for diagonal wins  		    
+
+			if (board.state[0] == board.state[4] && board.state[0] && board.state[8] == '') {
+				return 8;
+			}
+			if (board.state[0] == board.state[8] && board.state[0] && board.state[4] == '') {
+				return 4;
+			}
+			if (board.state[4] == board.state[8] && board.state[4] && board.state[0] == '') {
+				return 0;
+			}
+			if (board.state[2] == board.state[4] && board.state[2] && board.state[6] == '') {
+				return 6;
+			}
+			if (board.state[2] == board.state[6] && board.state[2] && board.state[4] == '') {
+				return 4;
+			}
+			if (board.state[4] == board.state[6] && board.state[4] && board.state[2] == '') {
+				return 2;
+			}
 
 			//If the board state is a terminal one, return the heuristic value
 			if (board.isTerminal() || depth == this.max_depth) {
@@ -331,6 +399,9 @@ var Player = function () {
 					//Updating best value
 					best = Math.max(best, node_value);
 					alpha = Math.max(alpha, best);
+					if (alpha >= beta) {
+						continue;
+					}
 
 					//Console Tracing Code
 					if (TRACE) {
@@ -346,10 +417,6 @@ var Player = function () {
 						//Comma seperated indicies if multiple moves have the same heuristic value
 						var moves = this.nodes_map.has(node_value) ? this.nodes_map.get(node_value) + ',' + avail[loopvar1] : avail[loopvar1];
 						this.nodes_map.set(node_value, moves);
-					}
-
-					if (alpha >= beta) {
-						break;
 					}
 				}
 				//If it's the main call, return the index of the best move or a random index if multiple indicies have the same value
@@ -400,6 +467,9 @@ var Player = function () {
 					//Updating best value
 					_best = Math.min(_best, _node_value);
 					beta = Math.min(_best, beta);
+					if (beta <= alpha) {
+						continue;
+					}
 					//Console Tracing Code
 					if (TRACE) {
 						if (depth == 0) {
@@ -447,15 +517,15 @@ var Player = function () {
 
 exports.default = Player;
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
-/***/ },
+/***/ }),
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
@@ -503,10 +573,11 @@ function drawWinningLine(_ref) {
 	}, 50);
 }
 
-//Starts a new game with a certain depth and a starting_player of 1 if human is going to start
+//Starts a new game with a certain depth and a starting_player of 1 if human is going to start, single player 
 function newGame() {
 	var depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
 	var starting_player = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+	var game_type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
 
 	//Instantiating a new player and an empty board
 	var p = new _Player2.default(parseInt(depth));
@@ -518,74 +589,127 @@ function newGame() {
 	board.innerHTML = '<div class="cell-0"></div><div class="cell-1"></div><div class="cell-2"></div><div class="cell-3"></div><div class="cell-4"></div><div class="cell-5"></div><div class="cell-6"></div><div class="cell-7"></div><div class="cell-8"></div>';
 
 	//Clearing all celebrations classes
-	removeClass(document.getElementById("charachters"), 'celebrate_human');
+	removeClass(document.getElementById("charachters"), 'celebrate_human'); //add celebrate human 1 and 2
 	removeClass(document.getElementById("charachters"), 'celebrate_robot');
 
 	//Storing HTML cells in an array
 	var html_cells = [].concat(_toConsumableArray(board.children));
 
-	//Initializing some variables for internal use
-	var starting = parseInt(starting_player),
-	    maximizing = starting,
-	    player_turn = starting;
+	//for single player
+	if (game_type) {
+		//Initializing some variables for internal use
+		var starting = parseInt(starting_player),
+		    maximizing = starting,
+		    player_turn = starting;
 
-	//If computer is going to start, choose a random cell as long as it is the center or a corner
-	if (!starting) {
-		//let center_and_corners = [0,2,4,6,8];
-		//let first_choice = center_and_corners[Math.floor(Math.random()*center_and_corners.length)];
-		var symbol = !maximizing ? 'x' : 'o';
-		b.insert(symbol, 4);
-		addClass(html_cells[4], symbol);
-		player_turn = 1; //Switch turns
-	}
+		//If computer is going to start, choose center
+		if (!starting) {
+			//let center_and_corners = [0,2,4,6,8];
+			//let first_choice = center_and_corners[Math.floor(Math.random()*center_and_corners.length)];
+			var symbol = !maximizing ? 'x' : 'o';
+			b.insert(symbol, 4);
+			addClass(html_cells[4], symbol);
+			player_turn = 1; //Switch turns
+		}
 
-	//Adding Click event listener for each cell
-	b.state.forEach(function (cell, index) {
-		html_cells[index].addEventListener('click', function () {
-			//If cell is already occupied or the board is in a terminal state or it's not humans turn, return false
-			if (hasClass(html_cells[index], 'x') || hasClass(html_cells[index], 'o') || b.isTerminal() || !player_turn) return false;
+		//Adding Click event listener for each cell
+		b.state.forEach(function (cell, index) {
+			html_cells[index].addEventListener('click', function () {
+				//If cell is already occupied or the board is in a terminal state or it's not humans turn, return false
+				if (hasClass(html_cells[index], 'x') || hasClass(html_cells[index], 'o') || b.isTerminal() || !player_turn) return false;
 
-			var symbol = maximizing ? 'x' : 'o'; //Maximizing player is always 'x'
+				var symbol = maximizing ? 'x' : 'o'; //Maximizing player is always 'x'
 
-			//Update the Board class instance as well as the Board UI
-			b.insert(symbol, index);
-			addClass(html_cells[index], symbol);
+				//Update the Board class instance as well as the Board UI
+				b.insert(symbol, index);
+				addClass(html_cells[index], symbol);
 
-			//If it's a terminal move and it's not a draw, then human won
-			if (b.isTerminal()) {
-				var _b$isTerminal = b.isTerminal(),
-				    winner = _b$isTerminal.winner;
-
-				if (winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_human');
-				drawWinningLine(b.isTerminal());
-			}
-			player_turn = 0; //Switch turns
-
-			//Get computer's best move and update the UI
-			p.getBestMove(b, -100, 100, !maximizing, function (best) {
-				var symbol = !maximizing ? 'x' : 'o';
-				b.insert(symbol, best);
-				addClass(html_cells[best], symbol);
+				//If it's a terminal move and it's not a draw, then human won
 				if (b.isTerminal()) {
-					var _b$isTerminal2 = b.isTerminal(),
-					    _winner = _b$isTerminal2.winner;
+					var _b$isTerminal = b.isTerminal(),
+					    winner = _b$isTerminal.winner;
 
-					if (_winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_robot');
+					if (winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_human');
 					drawWinningLine(b.isTerminal());
 				}
-				player_turn = 1; //Switch turns
+				player_turn = 0; //Switch turns
+
+				//Get computer's best move and update the UI
+				p.getBestMove(b, -100, 100, !maximizing, function (best) {
+					var symbol = !maximizing ? 'x' : 'o';
+					b.insert(symbol, best);
+					addClass(html_cells[best], symbol);
+					if (b.isTerminal()) {
+						var _b$isTerminal2 = b.isTerminal(),
+						    _winner = _b$isTerminal2.winner;
+
+						if (_winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_robot');
+						drawWinningLine(b.isTerminal());
+					}
+					player_turn = 1; //Switch turns
+				});
+			}, false);
+			if (cell) addClass(html_cells[index], cell);
+		});
+	}
+	//for multiplayer
+	else if (!game_type) {
+
+			//make other buttons unclickable if multiplayer is chosen !?
+			//Initializing some variables for internal use
+			var currentPlayer = "x"; //stores player turns
+
+			//Adding Click event listener for each cell
+			b.state.forEach(function (cell, index) {
+				html_cells[index].addEventListener('click', function () {
+					//If cell is already occupied or the board is in a terminal state, return false
+					if (hasClass(html_cells[index], 'x') || hasClass(html_cells[index], 'o') || b.isTerminal()) return false;
+
+					var symbol = currentPlayer;
+
+					//Update the Board class instance as well as the Board UI
+					b.insert(symbol, index);
+					addClass(html_cells[index], symbol);
+
+					//change player turns
+					currentPlayer = currentPlayer == "x" ? "o" : "x";
+
+					//changes player's turn label on bottom of the game, add to pop up? 
+					document.getElementById("player").innerHTML = currentPlayer.toUpperCase();
+
+					//If it's a terminal move and it's not a draw, then X won
+					if (b.isTerminal()) {
+						var _b$isTerminal3 = b.isTerminal(),
+						    winner = _b$isTerminal3.winner;
+
+						if (winner !== 'draw') addClass(document.getElementById("charachters"), 'celebrate_human');
+						drawWinningLine(b.isTerminal());
+					}
+				}, false);
+				if (cell) addClass(html_cells[index], cell);
 			});
-		}, false);
-		if (cell) addClass(html_cells[index], cell);
-	});
+		}
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
 
 	//Start a new game when page loads with default values
+	//multiplayer and singleplayer option's default values
 	var depth = -1;
-	var starting_player = 1;
-	newGame(depth, starting_player);
+	var starting_player = 1; //human
+	var game_type = 1;
+	newGame(depth, starting_player, game_type); //gametype argument
+
+	//event listener for game type
+	document.getElementById("game_type").addEventListener("click", function (event) {
+		if (event.target.tagName !== "LI" || hasClass(event.target, 'active')) return;
+		var game_type_choices = [].concat(_toConsumableArray(document.getElementById("game_type").children[0].children));
+		game_type_choices.forEach(function (choice) {
+			removeClass(choice, 'active');
+		});
+		addClass(event.target, 'active');
+		game_type = event.target.dataset.value;
+	}, false);
 
 	//Events handlers for depth, starting player options
 	document.getElementById("depth").addEventListener("click", function (event) {
@@ -609,10 +733,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
 	}, false);
 
 	document.getElementById("newgame").addEventListener('click', function () {
-		newGame(depth, starting_player);
+		newGame(depth, starting_player, game_type);
 	});
 });
 
-/***/ }
+/***/ })
 /******/ ]);
 //# sourceMappingURL=bundle.js.map

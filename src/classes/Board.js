@@ -29,7 +29,7 @@ class Board {
     }
     /**
      * Inserts a new symbol(x,o) into
-     * @param {String} symbol
+     * @param {String} symbol 
      * @param {Number} position
      * @return {Boolean} boolean represent success of the operation
      */
@@ -42,7 +42,7 @@ class Board {
     getAvailableMoves() {
         const moves = [];
         this.state.forEach((cell, index) => {
-            if(!cell) moves.push(index);
+            if(!cell) moves.push(index); 
         });
         return moves;
     }
@@ -88,7 +88,7 @@ class Board {
         if(this.isFull()) {
             return {'winner': 'draw'};
         }
-
+        
         //return false otherwise
         return false;
     }

@@ -25,6 +25,87 @@ class Player {
 		const TRACE = window.trace_ttt;
 		//clear nodes_map if the function is called for a new move
 		if(depth == 0) this.nodes_map.clear();
+		//Checking for horizontal wins
+  			
+  			var lv1=0;
+  			
+  			for (lv1=0; lv1<9;lv1++)
+  			{
+  				if( board.state[lv1] == board.state[lv1 + 1] && board.state[lv1] ) 
+  				{
+  		      		if( lv1==0 || lv1==3 || lv1==6 && (board.state[lv1 + 2]=='') )
+  		      		{
+  		      			return  (lv1 + 2);
+  					}
+
+  		      		if( lv1==1 || lv1==4 || lv1==7 &&  (board.state[lv1 - 1]=='') )
+  		      		{
+  		      			return  (lv1 - 1);	
+  		      		}
+		        }
+
+		        if( board.state[lv1] == board.state[lv1 + 2] && board.state[lv1] && (board.state[lv1+1]=='') ) 
+  				{
+  		      		if( lv1==0 || lv1==3 || lv1==6)
+  		      		{
+  		      			return  (lv1 + 1);
+  		      		}
+  		      	}
+  			}		      
+  		      
+
+  		    //Checking for vertical wins
+
+  		    var lv2 = 0;
+
+  		    for (lv2=0; lv1<3;lv1++)
+  			{
+  				if( board.state[lv1] == board.state[lv1 + 3] && board.state[lv1] && (board.state[lv1+6]=='')) 
+  				{
+  		         	return  (lv1 + 6);
+  				}
+
+		        if( board.state[lv1] == board.state[lv1 + 6] && board.state[lv1] && (board.state[lv1+3]=='')) 
+  				{
+  		      		return  (lv1 + 3);  		      				      		
+  		      	}
+  			}
+  		      
+  		    if(board.state[3] == board.state[6] && board.state[3] && (board.state[0]==''))
+  		    {
+  		      	return  0; 		          
+  		    }
+
+  		    if(board.state[4] == board.state[7] && board.state[4] && (board.state[1]==''))
+  		    {
+  		      	return  1;  		          
+  		    }
+
+  		    if(board.state[5] == board.state[8] && board.state[5] && (board.state[2]==''))
+  		    {
+  		      	return  2;  		          
+  		    }       
+  		    
+  		    //Checking for diagonal wins  		    
+
+  		    if(board.state[0] == board.state[4] && board.state[0] && (board.state[8]=='')) {
+  		          return  8;
+  		    }
+  		    if(board.state[0] == board.state[8] && board.state[0] && (board.state[4]=='')) {
+  		          return  4;
+  		    }
+  		    if(board.state[4] == board.state[8] && board.state[4] && (board.state[0]=='')) {
+  		          return  0;
+  		    }
+  		    if(board.state[2] == board.state[4] && board.state[2] && (board.state[6]=='')) {
+  		          return  6;
+  		    }
+  		    if(board.state[2] == board.state[6] && board.state[2] && (board.state[4]=='')) {
+  		          return  4;
+  		    }
+  		    if(board.state[4] == board.state[6] && board.state[4] && (board.state[2]=='')) {
+  		          return  2; 
+  		    }
 
 		//If the board state is a terminal one, return the heuristic value
 		if(board.isTerminal() || depth == this.max_depth ) {
@@ -58,7 +139,8 @@ class Player {
 		}
 
 		//Current player is maximizing
-		if(maximizing) {
+		if(maximizing) 
+		{
 			//Initializ best to the lowest possible value
 			let best = -100;
 			//Loop through all empty cells
@@ -83,6 +165,10 @@ class Player {
 				//Updating best value
 				best = Math.max(best, node_value);
 				alpha = Math.max(alpha, best);
+				if(alpha >= beta)
+				{
+					continue;
+				}
 
 				//Console Tracing Code
 				if(TRACE) {
@@ -100,10 +186,7 @@ class Player {
 					this.nodes_map.set(node_value, moves);
 				}
 
-				if(alpha >= beta)
-				{
-					break;
-				}
+
 			}
 			//If it's the main call, return the index of the best move or a random index if multiple indicies have the same value
 			if(depth == 0) {
@@ -154,6 +237,9 @@ class Player {
 				//Updating best value
 				best = Math.min(best, node_value);
 				beta = Math.min(best, beta);
+				if(beta <= alpha) {
+					continue;
+				}
 				//Console Tracing Code
 				if(TRACE) {
 					if(depth == 0) {
@@ -169,6 +255,7 @@ class Player {
 					var moves = this.nodes_map.has(node_value) ? this.nodes_map.get(node_value) + ',' + avail2[loopvar2] : avail2[loopvar2];
 					this.nodes_map.set(node_value, moves);
 				}
+
 			}
 			//If it's the main call, return the index of the best move or a random index if multiple indicies have the same value
 			if(depth == 0) {
